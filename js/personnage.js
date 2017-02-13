@@ -1,16 +1,25 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {  
     
+    // Défini les variables
     var gameCanvas = document.getElementById("graphic");
     var graphx = gameCanvas.getContext('2d');
 
-//    var heroImg = new Image();
-//    heroImg.src = "./src/characters/hero_fix.png";
+    // Crée un nouveau personnage avec son visuel et sa position d'origine en paramètre
     var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, 50);
     
+    //  Evenements des touches clavier
+document.addEventListener("keydown", function (e) {
+        var key = e.which;
+        if (key == "39") {joueur1.x += joueur1.VelociteX;}
+        if (key == "37") {joueur1.x -= joueur1.VelociteX;}
+    });
+    
+    
+    // Boucle qui permet l'animation du jeux
     function MainLoop() {
 //        Personnage fait une légère glissade lentement et sans arrêt 
-        joueur1.x += 1;
+//        joueur1.x += 1;
         
         graphx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         graphx.drawImage(joueur1.sprite, joueur1.x, joueur1.y);
@@ -20,8 +29,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function Personnage(img, x, y) {
         this.sprite = new Image();
         this.sprite.src = img;
-        this.x = x;
-        this.y = y;
+        this.x = x;     // position du personnage sur l'axe horizontal
+        this.y = y;     // position du personnage sur l'axe vertical
+        this.VelociteX = 1;
+        this.VelociteY = 0;
+        this.PreviousX;
+        this.PreviousY;
     }
     
     MainLoop();
@@ -67,3 +80,19 @@ function on_body_load() { // <body onload='on_body_load()'>...
 
 
 
+
+
+// Initialiser le Jeux avec Canvas
+//function startGame() {
+//    myGameArea.start();
+//}
+//
+//var myGameArea = {
+//    canvas : document.createElement("canvas"),
+//    start : function() {
+//        this.canvas.width = 480;
+//        this.canvas.height = 270;
+//        this.context = this.canvas.getContext("2d");
+//        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+//    }
+//}
