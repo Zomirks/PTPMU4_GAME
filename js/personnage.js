@@ -4,17 +4,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Défini les variables
     var gameCanvas = document.getElementById("graphic");
     var graphx = gameCanvas.getContext('2d');
-
+    var jumping = false;
+    
     // Crée un nouveau personnage avec son visuel et sa position d'origine en paramètre
-    var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, 50);
+    var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, 50, 5, 5, 44, 32);
     
     //  Evenements des touches clavier
 document.addEventListener("keydown", function (e) {
         var key = e.which;
         if (key == "39") {joueur1.x += joueur1.VelociteX;}
         if (key == "37") {joueur1.x -= joueur1.VelociteX;}
+        if ((key == "38") || (key == "32")) {joueur1.jump();}
     });
+   
     
+Personnage.prototype.jump = function() {
+    if (!jumping) {
+        jumping = true;
+        joueur1.y -= joueur1.VelociteY;
+        setTimeout(land, 500);
+    }
+}
+
+    function land() {
+        jumping = false;
+        joueur1.y += joueur1.VelociteY;
+    }
     
     // Boucle qui permet l'animation du jeux
     function MainLoop() {
@@ -26,13 +41,15 @@ document.addEventListener("keydown", function (e) {
         requestAnimationFrame(MainLoop, 1000/60);
     }
 
-    function Personnage(img, x, y) {
+    function Personnage(img, x, y, VelociteX, VelociteY, height, width) {
         this.sprite = new Image();
         this.sprite.src = img;
         this.x = x;     // position du personnage sur l'axe horizontal
         this.y = y;     // position du personnage sur l'axe vertical
-        this.VelociteX = 1;
-        this.VelociteY = 0;
+        this.VelociteX = VelociteX;     //  Vitesse du personnage sur l'axe horizontal
+        this.VelociteY = VelociteY;     //  Vitesse du personnage sur l'axe vertical
+        this.height = height;       // Hauteur du personnage
+        this.width = width;     // Largeur du personnage
         this.PreviousX;
         this.PreviousY;
     }
@@ -95,4 +112,20 @@ function on_body_load() { // <body onload='on_body_load()'>...
 //        this.context = this.canvas.getContext("2d");
 //        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 //    }
+//}
+
+
+
+// JUMP //
+//var jumping = false;
+//
+//function jump() {                 
+//  if (!jumping) {
+//    jumping = true;
+//    setTimeout(land, 500);
+//  }
+//}
+//
+//function land() {                 
+//  jumping = false;
 //}
