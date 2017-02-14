@@ -1,13 +1,17 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {  
+        
+    // Crée un nouveau personnage/plateforme avec son visuel et sa position d'origine en paramètre
+    var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, -20, 5, 5, 46, 32);
+    var block = new Plateform("./src/terrain/p1.png", 50, 120, 14, 14);
     
     // Défini les variables
     var gameCanvas = document.getElementById("graphic");
     var graphx = gameCanvas.getContext('2d');
     var jumping = false;
-    
-    // Crée un nouveau personnage avec son visuel et sa position d'origine en paramètre
-    var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, 50, 5, 5, 44, 32);
+    joueur1.Gravity = 20;
+    joueur1.Weight = 1;     //Défini le poids du personnage (vitesse de sa chute)
+
     
     //  Evenements des touches clavier
 document.addEventListener("keydown", function (e) {
@@ -16,7 +20,6 @@ document.addEventListener("keydown", function (e) {
         if (key == "37") {joueur1.x -= joueur1.VelociteX;}
         if ((key == "38") || (key == "32")) {joueur1.jump();}
     });
-   
     
 Personnage.prototype.jump = function() {
     if (!jumping) {
@@ -25,8 +28,9 @@ Personnage.prototype.jump = function() {
         setTimeout(land, 500);
     }
 }
-
-    function land() {
+    
+    //  Permet de refaire atterir le joueur à sa hauteur initial
+    function land() {          
         jumping = false;
         joueur1.y += joueur1.VelociteY;
     }
@@ -35,9 +39,14 @@ Personnage.prototype.jump = function() {
     function MainLoop() {
 //        Personnage fait une légère glissade lentement et sans arrêt 
 //        joueur1.x += 1;
+        joueur1.y += joueur1.VelociteY;
+        
+        if (joueur1.VelociteY < joueur1.Gravity) joueur1.VelociteY += joueur1.Weight;
+        if (joueur1.isColliding(block)) joueur1.VelociteY=0;
         
         graphx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-        graphx.drawImage(joueur1.sprite, joueur1.x, joueur1.y);
+        graphx.drawImage(joueur1.sprite, joueur1.x, joueur1.y);             //  drawImage permet l'affichage de l'élément
+        graphx.drawImage(block.sprite, block.x, block.y);
         requestAnimationFrame(MainLoop, 1000/60);
     }
 
@@ -52,10 +61,34 @@ Personnage.prototype.jump = function() {
         this.width = width;     // Largeur du personnage
         this.PreviousX;
         this.PreviousY;
+        this.Gravity = 0;
+        this.Weight = 0;
+        
+        this.isColliding = function(obj) {
+            if (this.x > obj.x + obj.width) return false;
+            if (this.x + this.width < obj.x) return false;
+            if (this.y > this.y + obj.height) return false;
+            if (this.y + this.height < obj.y) return false;
+            return true;
+        }
+    }
+    
+    function Plateform(img, x, y, height, width) {
+        this.sprite = new Image();
+        this.sprite.src = img;
+        this.x = x;     // position de la plateforme sur l'axe horizontal
+        this.y = y;     // position de la plateforme sur l'axe vertical
+        this.height = height;       // Hauteur de la plateforme
+        this.width = width;     // Largeur de la plateforme
     }
     
     MainLoop();
 });
+
+
+
+
+
 
 
 // Code pour faire des gif en sprite sheet
