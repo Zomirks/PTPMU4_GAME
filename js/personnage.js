@@ -3,14 +3,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
         
     // Crée un nouveau personnage/plateforme avec son visuel et sa position d'origine en paramètre
     var joueur1 = new Personnage("./src/characters/hero_fix.png", 50, -20, 5, 5, 46, 32);
-    var block = new Plateform("./src/terrain/p1.png", 50, 120, 14, 14);
+    var block = new Plateform("./src/terrain/p1.png", 50, 300, 14, 14);
     
     // Défini les variables
     var gameCanvas = document.getElementById("graphic");
     var graphx = gameCanvas.getContext('2d');
     var jumping = false;
     joueur1.Gravity = 20;
-    joueur1.Weight = 1;     //Défini le poids du personnage (vitesse de sa chute)
+    joueur1.Weight = 0.1;     //Défini le poids du personnage (vitesse de sa chute)
 
     
     //  Evenements des touches clavier
