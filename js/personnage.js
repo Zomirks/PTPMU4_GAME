@@ -47,7 +47,7 @@ Personnage.prototype.jump = function() {
         graphx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         graphx.drawImage(joueur1.sprite, joueur1.x, joueur1.y);             //  drawImage permet l'affichage de l'élément
         graphx.drawImage(block.sprite, block.x, block.y);
-        requestAnimationFrame(MainLoop, 1000/60);
+//        requestAnimationFrame(MainLoop, 1000/60);
     }
 
     function Personnage(img, x, y, VelociteX, VelociteY, height, width) {
@@ -104,7 +104,7 @@ var img = new Image();
 img.onload = function () { // Triggered when image has finished loading.
     img_obj.source = img;  // we set the image source for our object.
 }
-img.src = 'img/filename.png'; // contains an image of size 256x16
+img.src = ''; // contains an image of size 256x16
                               // with 16 frames of size 16x16
 
 function draw_anim(context, x, y, iobj) { // context is the canvas 2d context.
