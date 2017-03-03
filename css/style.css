@@ -1,7 +1,11 @@
-#graphic {
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid black;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#graphics {
+  background-color: #B17C68;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
