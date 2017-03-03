@@ -6,17 +6,17 @@ function gameStart() {
   var ctx = gameCanvas.getContext('2d');
   // Images
   var weapon = new Image();
-  weapon.src = "src/weapons/weapon_back1.png";
+  weapon.src = "./src/weapons/weapon_back1.png";
   // Déclaration des objets
-  var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
+  var hero = new Object("./src/characters/hero_fix.png", 30, 30, 44, 32);
   var blocks = new Array();
   for (i=0; i<10; i++){
-      var block = new Object("src/terrain/p3.png", 28*i+30, 300, 30, 30);
+      var block = new Object("./src/terrain/p3.png", 28*i+30, 300, 30, 30);
       blocks.push(block);
       console.log(block.height);
   }
-  blocks[9] = new Object("src/terrain/p3.png", 30, 200, 30, 30);
-  blocks[10] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
+  blocks[9] = new Object("./src/terrain/p3.png", 30, 200, 30, 30);
+  blocks[10] = new Object("./src/terrain/p3.png", 120, 250, 30, 30);
 
 
   // Variables concernant l'initation des attributs des objets
@@ -38,15 +38,15 @@ function gameStart() {
 
   function checkKeyDown(e) {
       e = e || window.event;
-      if (e.keyCode == '38') {isJumping = true}
-      if (e.keyCode == '40') {}
-      if (e.keyCode == '37') { isLeft = true; orientation = 'left'}
-      if (e.keyCode == '39') { isRight = true; orientation = 'right'}
+      if ((e.keyCode == '38') || (e.keyCode == '32')) {isJumping = true}    //  ArrowUp ou Spacebar
+      if (e.keyCode == '40') {}                                             //  ArrowDown
+      if (e.keyCode == '37') { isLeft = true; orientation = 'left'}         //  ArrowLeft
+      if (e.keyCode == '39') { isRight = true; orientation = 'right'}       //  ArrowRight
   }
 
     function checkKeyUp(e) {
       e = e || window.event;
-      if (e.keyCode == '38') {isJumping = false}
+      if ((e.keyCode == '38') || (e.keyCode == '32')) {isJumping = false}
       if (e.keyCode == '40') {}
       if (e.keyCode == '37') isLeft = false;
       if (e.keyCode == '39') isRight = false;
@@ -117,13 +117,13 @@ function gameStart() {
     // Placement du héros
 
     if (isRight && !(hero.velocity_y > 0.3) && !(hero.velocity_y < 0)){
-      hero.sprite.src = "src/characters/hero_right.png"
+      hero.sprite.src = "./src/characters/hero_right.png"
       hero.width = 36;
       hero.renderUpdate(3, 6);
       hero.render(ctx, 6);
     }
     else if (isLeft && !(hero.velocity_y > 0.3) && !(hero.velocity_y < 0)){
-      hero.sprite.src = "src/characters/hero_left.png"
+      hero.sprite.src = "./src/characters/hero_left.png"
       this.width = 36;
       hero.renderUpdate(3, 6);
       hero.render(ctx, 6);
@@ -132,14 +132,14 @@ function gameStart() {
       if (orientation == 'left'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_jump_left.png";
+        hero.sprite.src = "./src/characters/hero_jump_left.png";
         hero.render(ctx, 1);
         this.width = 34;
       }
       else if (orientation == 'right'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_jump_right.png";
+        hero.sprite.src = "./src/characters/hero_jump_right.png";
         hero.render(ctx, 1);
         this.width = 34;
       }
@@ -148,14 +148,14 @@ function gameStart() {
       if (orientation == 'left'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_down_left.png";
+        hero.sprite.src = "./src/characters/hero_down_left.png";
         hero.render(ctx, 1);
         this.width = 34;
       }
       else if (orientation == 'right'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_down_right.png";
+        hero.sprite.src = "./src/characters/hero_down_right.png";
         hero.render(ctx, 1);
         this.width = 34;
       }
@@ -164,14 +164,14 @@ function gameStart() {
       if (orientation == 'left'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_fix_left.png";
+        hero.sprite.src = "./src/characters/hero_fix_left.png";
         hero.render(ctx, 1);
         this.width = 32;
       }
       else if (orientation == 'right') {
         hero.tickCount = 0;
         hero.frameIndex = 0;
-        hero.sprite.src = "src/characters/hero_fix_right.png";
+        hero.sprite.src = "./src/characters/hero_fix_right.png";
         hero.render(ctx, 1);
         this.width = 32;
       }

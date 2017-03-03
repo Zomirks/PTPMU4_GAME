@@ -5,10 +5,11 @@ body {
 }
 
 #graphics {
-  background-color: #B17C68;
-  position: absolute;
-  top: 0;
-  left: 0;
+    background-color: #B17C68;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: none;
 }
 
 #menu {
@@ -43,4 +44,18 @@ ul li {
     cursor: pointer;
     margin-bottom: 20px;
     font-size: 18pt;
+}
+
+li:hover {
+    transform: scale(1.5);
+}
+
+li:hover:before {
+    content: "* ";
+    color: #B17C68;
+}
+
+li:hover:after {
+    content: " *";
+    color: #B17C68;
 }
