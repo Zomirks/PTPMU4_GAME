@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", function(event){
 
+function gameStart() {
+    
   // Variables de l'interface graphique du jeu
   var gameCanvas = document.getElementById("graphics");
   var ctx = gameCanvas.getContext('2d');
@@ -253,5 +254,4 @@ document.addEventListener("DOMContentLoaded", function(event){
   /* ---------- Execution ------------ */
   /* --------------------------------- */
   MainLoop();
-
-});
+}
