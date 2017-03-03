@@ -4,19 +4,26 @@ function gameStart() {
   // Variables de l'interface graphique du jeu
   var gameCanvas = document.getElementById("graphics");
   var ctx = gameCanvas.getContext('2d');
+    
+    var deathScreen = false;
+    var life = new Object("./src/coeur.png", 500, 10, 43, 50);
+    
+    
+    
   // Images
   var weapon = new Image();
   weapon.src = "./src/weapons/weapon_back1.png";
   // Déclaration des objets
   var hero = new Object("./src/characters/hero_fix.png", 30, 30, 44, 32);
   var blocks = new Array();
-  for (i=0; i<10; i++){
+  for (i=0; i<15; i++){
       var block = new Object("./src/terrain/p3.png", 28*i+30, 300, 30, 30);
       blocks.push(block);
       console.log(block.height);
   }
   blocks[9] = new Object("./src/terrain/p3.png", 30, 200, 30, 30);
   blocks[10] = new Object("./src/terrain/p3.png", 120, 250, 30, 30);
+  blocks[14] = new Object("./src/terrain/p3.png", 470, 250, 30, 30);
 
 
   // Variables concernant l'initation des attributs des objets
@@ -177,7 +184,19 @@ function gameStart() {
       }
     }
 
-    console.log(hero.velocity_y);
+      if((hero.y > 400) && (deathScreen == false)) {
+          deathScreen = true;
+          gameCanvas.style.display = "none";
+          
+          var myBody = document.getElementById("body");
+          var deathMessage =  document.createElement("div");
+          deathMessage.setAttribute("id", "deathMessage");
+          
+          
+          deathMessage.innerHTML = '<p>You won!</p><p class="maybe">... (or maybe not)</p>';
+          myBody.appendChild(deathMessage);
+      }
+      life.render(ctx,1);
     requestAnimationFrame(MainLoop, 1000/60);
 
   }

@@ -23,6 +23,22 @@ body {
     display: block;
 }
 
+#deathMessage { 
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    background-color: dimgrey;
+    z-index: 1;
+    display: flex;
+    font-size: 55pt;
+    color: crimson;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
 h1 {
     width: 100%;
     text-align: center;
@@ -48,6 +64,7 @@ ul li {
 
 li:hover {
     transform: scale(1.5);
+    color: crimson;
 }
 
 li:hover:before {
@@ -58,4 +75,8 @@ li:hover:before {
 li:hover:after {
     content: " *";
     color: #B17C68;
+}
+
+.maybe {
+    font-size: 12pt;
 }
