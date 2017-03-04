@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>PTPMU4</title>
-      <link rel="stylesheet" href="./css/reset.css">
-      <link rel="stylesheet" href="./css/style.css">
-    </head>
-    <body id="body">
-        <div id="menu">
-            <h1>Game</h1>
-            <ul>
-                <li id="newGame">Nouvelle partie</li>
-                <li>Classement</li>
-                <li>Crédits</li>
-            </ul>
-        </div>
-        <canvas id="graphics" width="600" height="400"></canvas>
-        <script src="./js/script.js"></script>
-        <script src="./js/menu.js"></script>
-        
 
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PTPMU4</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body id="body">
+    <div id="menu">
+        <h1>Game</h1>
+        <ul>
+            <li id="newGame">Nouvelle partie</li>
+            <li>Classement</li>
+            <li>Crédits</li>
+        </ul>
+    </div>
+    <canvas id="graphics" width="600" height="400"></canvas>
+
+    <div id="control">
+        <p>Choississez votre façon de jouer:</p>
+        <div class="flex">
+            <img id="Arrow" alt="" src="./src/ATH/Arrow.png" />
+            <img id="ZQSD" alt="" src="./src/ATH/ZQSD.png" />
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script src="./js/menu.js"></script>
+
+
+</body>
+
 </html>
