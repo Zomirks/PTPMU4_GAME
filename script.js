@@ -63,10 +63,11 @@ document.addEventListener("DOMContentLoaded", function(event){
     /* Pré-initilialisation des déplacements */
     hero.x += hero.velocity_x;
     hero.y += hero.velocity_y;
-    heroIsCollidingBelow = false;
-    heroIsCollidingAbove = false;
-    heroIsCollidingLeft = false;
-    heroIsCollidingRight = false;
+    hero.weight = 0.3;
+    hero.IsCollidingBelow = false;
+    hero.IsCollidingAbove = false;
+    hero.IsCollidingLeft = false;
+    hero.IsCollidingRight = false;
 
     /* -----------------  TRAITEMENT  ---------------- */
     // Déplacements droite / gauche
@@ -80,29 +81,30 @@ document.addEventListener("DOMContentLoaded", function(event){
       // Collision au sol
       if (hero.isColliding(blocks[i]) == 'below'){
         hero.velocity_y = 0;
-        hero.y = blocks[i].y-hero.height; // Forcer la position en cas de valeur flottante
-        heroIsCollidingBelow = true;
+        hero.y = blocks[i].y - hero.height;
+        hero.IsCollidingBelow = true;
       }
       // Collision de plafond
       if (hero.isColliding(blocks[i]) == 'above'){
         hero.velocity_y = 0;
-        heroIsCollidingAbove = true;
+        hero.IsCollidingAbove = true;
       }
       // Collisons latérales (avec tentative de déplacement)
       if (hero.isColliding(blocks[i]) == 'left' && isLeft){
         hero.velocity_x = 0;
-        heroIsCollidingLeft = true;
+        hero.IsCollidingLeft = true;
       }
       if (hero.isColliding(blocks[i]) == 'right' && isRight){
         hero.velocity_x = 0;
-        heroIsCollidingRight = true;
+        hero.IsCollidingRight = true;
       }
     }
+
     // Chute
-    if (hero.velocity_y < hero.gravity && heroIsCollidingBelow == false)
+    if (hero.velocity_y < hero.gravity && hero.IsCollidingBelow == false)
       hero.velocity_y += hero.weight;
     // Saut
-    if (isJumping && heroIsCollidingBelow == true){
+    if (isJumping && hero.IsCollidingBelow == true){
       hero.velocity_y = -6;
     }
 
@@ -176,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function(event){
       }
     }
 
-    console.log(hero.velocity_y);
     requestAnimationFrame(MainLoop, 1000/60);
 
   }
@@ -202,6 +203,11 @@ document.addEventListener("DOMContentLoaded", function(event){
     this.width = width;
     this.gravity = 0;
     this.weight = 0;
+    // Collisions
+    this.IsCollidingBelow = false;
+    this.IsCollidingAbove = false;
+    this.IsCollidingLeft = false;
+    this.IsCollidingRight = false;
   }
   /* Object method isColliding
   * Permet de tester si le joueur est contre un autre objet
@@ -218,9 +224,9 @@ document.addEventListener("DOMContentLoaded", function(event){
         return 'left';
       if (!(this.y > obj.y + obj.height-1) && !(this.y + this.height < obj.y+1) && !(this.x + this.width < obj.x) && !(this.x > obj.x + obj.width) && (this.x + this.width < obj.x +1))
         return 'right';
-      if (!(this.y > obj.y + 1) && !(this.y + this.height < obj.y) && !(this.x + this.width < obj.x+1) && !(this.x > obj.x + obj.width-1) && (this.y + this.height > obj.y))
+      if (!(this.y > obj.y) && !(this.y + this.height < obj.y) && !(this.x + this.width < obj.x+1) && !(this.x > obj.x + obj.width-1) && (this.y + this.height >= obj.y))
         return 'below';
-      if (!(this.y > obj.y + obj.height) && !(this.y + this.height < obj.y+1) && !(this.x + this.width < obj.x+1) && !(this.x > obj.x + obj.width-1) && (this.y < obj.y + obj.height))
+      if (!(this.y > obj.y + obj.height) && !(this.y + this.height < obj.y + 0) && !(this.x + this.width < obj.x+1) && !(this.x > obj.x + obj.width-1) && (this.y < obj.y + obj.height))
         return 'above';
   }
   // Premer de créer un rendu de l'objet dans le contexte (en cas d'animation)
