@@ -115,3 +115,15 @@ li:hover:after {
     text-decoration: none;
     margin-top: 20px;
 }
+
+
+#pauseScreen {
+    background-color: rgba(105, 105, 105, 0.75);
+    display: none;
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    z-index: 1;
+}

@@ -7,7 +7,8 @@ function gameStart() {
     var deathScreen = false;
     var life = new Object("./src/ATH/coeur.png", 500, 10, 43, 50);
 
-
+    var AnimationLoop;
+    var isPause = false;
 
     // Images
     var weapon = new Image();
@@ -66,9 +67,10 @@ function gameStart() {
         controlRight = "68";
         controlLeft = "81";
     });
-
+    
     function checkKeyDown(e) {
         e = e || window.event;
+        if (e.keyCode == "27") {pauseScreen(isPause);}
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
             isJumping = true
         } //  ArrowUp ou Spacebar
@@ -82,7 +84,23 @@ function gameStart() {
             orientation = 'right'
         } //  ArrowRight
     }
-
+    
+    function pauseScreen(pause) {
+        var ScreenWhenPause = document.getElementById("pauseScreen");
+        switch(pause) {
+            case true:
+                AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
+                ScreenWhenPause.style.display = "none";
+                isPause = false;
+                break;
+            case false:
+                cancelAnimationFrame(AnimationLoop);
+                ScreenWhenPause.style.display = "block";
+                isPause = true;
+                break;
+        }   
+    }
+    
     function checkKeyUp(e) {
         e = e || window.event;
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
@@ -225,7 +243,7 @@ function gameStart() {
         }
 
         life.render(ctx, 1);
-        requestAnimationFrame(MainLoop, 1000 / 60);
+        AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
 
     }
 
