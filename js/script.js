@@ -70,7 +70,7 @@ function gameStart() {
     
     function checkKeyDown(e) {
         e = e || window.event;
-        if (e.keyCode == "27") {pauseScreen(isPause);}
+        if (e.keyCode == "96") {pauseScreen(isPause);}
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
             isJumping = true
         } //  ArrowUp ou Spacebar
@@ -92,11 +92,13 @@ function gameStart() {
                 AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
                 ScreenWhenPause.style.display = "none";
                 isPause = false;
+                gameCanvas.className -= " flou";
                 break;
             case false:
                 cancelAnimationFrame(AnimationLoop);
                 ScreenWhenPause.style.display = "block";
                 isPause = true;
+                gameCanvas.className += " flou";
                 break;
         }   
     }
