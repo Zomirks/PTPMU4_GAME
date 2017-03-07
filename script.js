@@ -9,20 +9,33 @@ document.addEventListener("DOMContentLoaded", function(event){
   // Déclaration des objets
   var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
   var blocks = new Array();
-  for (i=0; i<10; i++){
+  for (i=0; i<12; i++){
       var block = new Object("src/terrain/p3.png", 28*i+30, 300, 30, 30);
       blocks.push(block);
-      console.log(block.height);
   }
   blocks[9] = new Object("src/terrain/p3.png", 30, 200, 30, 30);
   blocks[10] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
+  blocks[11] = new Object("src/terrain/p3.png", 120, -50, 30, 30);
+  blocks[12] = new Object("src/terrain/p3.png", 250, 250, 30, 30);
+  var monster1 = new Object("src/monsters/m1.png", 190, 220, 24, 32);
 
+  var test = blocks.slice() ;
+  test.splice(11,1);
 
   // Variables concernant l'initation des attributs des objets
   hero.velocity_x = 0;
   hero.velocity_y = 3;
   hero.gravity = 3;
   hero.weight = 0.3;
+
+  blocks[11].gravity = 1;
+  blocks[11].weight = 0.3;
+  blocks[11].velocity_y = 3;
+
+  monster1.gravity = 1;
+  monster1.weight = 0.3;
+  monster1.velocity_y = 3;
+  monster1.velocity_x = 2;
 
   /* --------------------------------- */
   /* ---------- Ckeckkey ------------- */
@@ -64,10 +77,12 @@ document.addEventListener("DOMContentLoaded", function(event){
     hero.x += hero.velocity_x;
     hero.y += hero.velocity_y;
     hero.weight = 0.3;
-    hero.IsCollidingBelow = false;
-    hero.IsCollidingAbove = false;
-    hero.IsCollidingLeft = false;
-    hero.IsCollidingRight = false;
+    blocks[11].x += blocks[11].velocity_x;
+    blocks[11].y += blocks[11].velocity_y;
+    blocks[11].weight = 0.3;
+    monster1.x += monster1.velocity_x;
+    monster1.y += monster1.velocity_y;
+    monster1.weight = 0.3;
 
     /* -----------------  TRAITEMENT  ---------------- */
     // Déplacements droite / gauche
@@ -77,32 +92,28 @@ document.addEventListener("DOMContentLoaded", function(event){
     else hero.velocity_x = 0;
 
     // Effets des collisions
-    for (i=0; i<blocks.length; i++){
-      // Collision au sol
-      if (hero.isColliding(blocks[i]) == 'below'){
-        hero.velocity_y = 0;
-        hero.y = blocks[i].y - hero.height;
-        hero.IsCollidingBelow = true;
-      }
-      // Collision de plafond
-      if (hero.isColliding(blocks[i]) == 'above'){
-        hero.velocity_y = 0;
-        hero.IsCollidingAbove = true;
-      }
-      // Collisons latérales (avec tentative de déplacement)
-      if (hero.isColliding(blocks[i]) == 'left' && isLeft){
-        hero.velocity_x = 0;
-        hero.IsCollidingLeft = true;
-      }
-      if (hero.isColliding(blocks[i]) == 'right' && isRight){
-        hero.velocity_x = 0;
-        hero.IsCollidingRight = true;
-      }
+    hero.HeroCollidingEffects(blocks);
+    blocks[11].CollidingEffects(test);
+    monster1.CollidingEffects(blocks);
+    monster1.iaChangePathOnColliding();
+    monster1.fall();
+
+    // Dégats
+    if (hero.isColliding(monster1) == 'below'){
+      hero.velocity_y = -5;
+    }
+    if (hero.isColliding(monster1) == 'left'){
+      hero.velocity_y = -2;
+      console.log('Aie');
+    }
+    if (hero.isColliding(monster1) == 'right'){
+      hero.velocity_y = -2;
+      console.log('Aie');
     }
 
     // Chute
-    if (hero.velocity_y < hero.gravity && hero.IsCollidingBelow == false)
-      hero.velocity_y += hero.weight;
+    hero.fall();
+    blocks[11].fall();
     // Saut
     if (isJumping && hero.IsCollidingBelow == true){
       hero.velocity_y = -6;
@@ -115,15 +126,18 @@ document.addEventListener("DOMContentLoaded", function(event){
       blocks[i].render(ctx, 1);
     }
 
+    // Placement des monstres
+    monster1.render(ctx, 1);
+
     // Placement du héros
 
-    if (isRight && !(hero.velocity_y > 0.3) && !(hero.velocity_y < 0)){
+    if (isRight && (hero.velocity_y == 0)){
       hero.sprite.src = "src/characters/hero_right.png"
       hero.width = 36;
       hero.renderUpdate(3, 6);
       hero.render(ctx, 6);
     }
-    else if (isLeft && !(hero.velocity_y > 0.3) && !(hero.velocity_y < 0)){
+    else if (isLeft && (hero.velocity_y == 0)){
       hero.sprite.src = "src/characters/hero_left.png"
       this.width = 36;
       hero.renderUpdate(3, 6);
@@ -229,6 +243,72 @@ document.addEventListener("DOMContentLoaded", function(event){
       if (!(this.y > obj.y + obj.height) && !(this.y + this.height < obj.y + 0) && !(this.x + this.width < obj.x+1) && !(this.x > obj.x + obj.width-1) && (this.y < obj.y + obj.height))
         return 'above';
   }
+
+  Object.prototype.HeroCollidingEffects = function(blocksArray){
+    // Remettre à zéro l'effet de collision
+    this.IsCollidingBelow = false;
+    this.IsCollidingAbove = false;
+    this.IsCollidingLeft = false;
+    this.IsCollidingRight = false;
+    // Calcul des collisions de blocks
+    for (i=0; i<blocksArray.length; i++){
+      // Collision au sol
+      if (this.isColliding(blocksArray[i]) == 'below'){
+        this.velocity_y = 0;
+        this.y = blocks[i].y - this.height;
+        this.IsCollidingBelow = true;
+      }
+      // Collision de plafond
+      if (this.isColliding(blocksArray[i]) == 'above'){
+        this.velocity_y = 0;
+        this.IsCollidingAbove = true;
+      }
+      // Collisons latérales (avec tentative de déplacement)
+      if (this.isColliding(blocksArray[i]) == 'left' && isLeft){
+        this.velocity_x = 0;
+        this.IsCollidingLeft = true;
+      }
+      if (this.isColliding(blocksArray[i]) == 'right' && isRight){
+        this.velocity_x = 0;
+        this.IsCollidingRight = true;
+      }
+    }
+  }
+
+  Object.prototype.CollidingEffects = function(blocksArray){
+    // Remettre à zéro l'effet de collision
+    this.IsCollidingBelow = false;
+    this.IsCollidingAbove = false;
+    this.IsCollidingLeft = false;
+    this.IsCollidingRight = false;
+    // Calcul des collisions de blocks
+    for (i=0; i<blocksArray.length; i++){
+      // Collision au sol
+      if (this.isColliding(blocksArray[i]) == 'below'){
+        this.velocity_y = 0;
+        this.y = blocks[i].y - this.height;
+        this.IsCollidingBelow = true;
+      }
+      // Collision de plafond
+      if (this.isColliding(blocksArray[i]) == 'above'){
+        this.velocity_y = 0;
+        this.IsCollidingAbove = true;
+      }
+      // Collisons latérales (avec tentative de déplacement)
+      if (this.isColliding(blocksArray[i]) == 'left'){
+        this.IsCollidingLeft = true;
+      }
+      if (this.isColliding(blocksArray[i]) == 'right'){
+        this.IsCollidingRight = true;
+      }
+    }
+  }
+
+  Object.prototype.fall = function(){
+    if (this.velocity_y < this.gravity && this.IsCollidingBelow == false)
+      this.velocity_y += this.weight;
+  }
+
   // Premer de créer un rendu de l'objet dans le contexte (en cas d'animation)
   Object.prototype.render = function(context, numberOfFrames){
     context.clearRect(this.x, this.y, this.width, this.height);
@@ -253,6 +333,24 @@ document.addEventListener("DOMContentLoaded", function(event){
       else
         this.frameIndex = 0;
     }
+  }
+
+  Object.prototype.getDirectionByVelocityX = function(){
+    if (this.velocity_x < 0)
+      return 'isLeft';
+    else if (this.velocity_x > 0)
+      return 'isRight';
+    else
+      return 'fixed';
+  }
+
+  // Fonction IA
+  Object.prototype.iaLateralMoving = function(speed){
+    this.velocity_x = speed;
+  }
+  Object.prototype.iaChangePathOnColliding = function(speed){
+    if (this.IsCollidingLeft == true || this.IsCollidingRight == true)
+      this.iaLateralMoving(-this.velocity_x);
   }
 
   /* --------------------------------- */
