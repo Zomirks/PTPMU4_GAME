@@ -16,13 +16,19 @@ function gameStart() {
     // Déclaration des objets
     var hero = new Object("./src/characters/hero_fix.png", 30, 30, 44, 32);
     var blocks = new Array();
-    for (i = 0; i < 15; i++) {
-        var block = new Object("./src/terrain/p3.png", 28 * i + 30, 300, 30, 30);
+    for (i = 0; i < 17; i++) {
+        var block = new Object("./src/terrain/p3_mid.png", 30 * i + 30, 300, 30, 30);
         blocks.push(block);
     }
-    blocks[9] = new Object("./src/terrain/p3.png", 30, 200, 30, 30);
-    blocks[10] = new Object("./src/terrain/p3.png", 120, 250, 30, 30);
-    blocks[14] = new Object("./src/terrain/p3.png", 470, 250, 30, 30);
+    blocks[0] = new Object("./src/terrain/p3_start.png", 30, 300, 30, 30);
+    blocks[8] = new Object("./src/terrain/p3_end.png", 270, 300, 30, 30);
+    blocks[9] = new Object("./src/terrain/p3.png", 30, 210, 30, 30);
+    blocks[10] = new Object("./src/terrain/p3.png", 115, 250, 30, 30);
+    blocks[11] = new Object("./src/terrain/p3_start.png", 360, 300, 30, 30);
+    blocks[13] = new Object("./src/terrain/p3_end.png", 420, 300, 30, 30);
+    blocks[14] = new Object("./src/terrain/p3.png", 480, 330, 30, 30);
+    blocks[15] = new Object("./src/terrain/p3.png", 540, 280, 30, 30);
+    blocks[16] = new Object("./src/terrain/p3.png", 570, 250, 30, 30);
 
 
     // Variables concernant l'initation des attributs des objets
@@ -70,7 +76,7 @@ function gameStart() {
     
     function checkKeyDown(e) {
         e = e || window.event;
-        if (e.keyCode == "96") {pauseScreen(isPause);}
+        if (e.keyCode == "27") {pauseScreen(isPause);}
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
             isJumping = true
         } //  ArrowUp ou Spacebar
