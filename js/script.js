@@ -30,7 +30,8 @@ function gameStart() {
     blocks[15] = new Object("./src/terrain/p3.png", 540, 280, 30, 30);
     blocks[16] = new Object("./src/terrain/p3.png", 570, 250, 30, 30);
 
-
+    var ghost = new Object("./src/ghost.png", 260, 260, 40, 40);
+    var slime = new Object("./src/slime.png", 200, 260, 50, 50);
     // Variables concernant l'initation des attributs des objets
     hero.velocity_x = 0;
     hero.velocity_y = 3;
@@ -73,10 +74,12 @@ function gameStart() {
         controlRight = "68";
         controlLeft = "81";
     });
-    
+
     function checkKeyDown(e) {
         e = e || window.event;
-        if (e.keyCode == "27") {pauseScreen(isPause);}
+        if (e.keyCode == "27") {
+            pauseScreen(isPause);
+        }
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
             isJumping = true
         } //  ArrowUp ou Spacebar
@@ -90,10 +93,10 @@ function gameStart() {
             orientation = 'right'
         } //  ArrowRight
     }
-    
+
     function pauseScreen(pause) {
         var ScreenWhenPause = document.getElementById("pauseScreen");
-        switch(pause) {
+        switch (pause) {
             case true:
                 AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
                 ScreenWhenPause.style.display = "none";
@@ -106,9 +109,9 @@ function gameStart() {
                 isPause = true;
                 gameCanvas.className += " flou";
                 break;
-        }   
+        }
     }
-    
+
     function checkKeyUp(e) {
         e = e || window.event;
         if ((e.keyCode == controlJump) || (e.keyCode == '32')) {
@@ -181,6 +184,7 @@ function gameStart() {
             blocks[i].render(ctx, 1);
         }
 
+
         // Placement du héros
 
         if (isRight && !(hero.velocity_y > 0.3) && !(hero.velocity_y < 0)) {
@@ -250,6 +254,8 @@ function gameStart() {
             myBody.appendChild(deathMessage);
         }
 
+        slime.render(ctx, 1);
+        ghost.render(ctx, 1);
         life.render(ctx, 1);
         AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
 
