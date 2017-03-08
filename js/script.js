@@ -31,7 +31,7 @@ function gameStart() {
     blocks[16] = new Object("./src/terrain/p3.png", 570, 250, 30, 30);
 
     var ghost = new Object("./src/ghost.png", 260, 260, 40, 40);
-    var slime = new Object("./src/slime.png", 200, 260, 50, 50);
+    var slime = new Object("./src/slime.png", 200, 258, 50, 50);
     // Variables concernant l'initation des attributs des objets
     hero.velocity_x = 0;
     hero.velocity_y = 3;
@@ -306,7 +306,7 @@ function gameStart() {
     }
     // Premer de créer un rendu de l'objet dans le contexte (en cas d'animation)
     Object.prototype.render = function(context, numberOfFrames) {
-        context.clearRect(this.x, this.y, this.width, this.height);
+        
         context.drawImage(
             this.sprite,
             this.frameIndex * this.width,
