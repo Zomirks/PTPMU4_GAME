@@ -8,6 +8,7 @@
     <title>PTPMU4</title>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/jquery-3.1.1.min.js"></script>
 </head>
 
 <body id="body">
@@ -15,7 +16,7 @@
         <h1>Game</h1>
         <ul>
             <li id="newGame">Nouvelle partie</li>
-            <li>Classement</li>
+            <li id="ajax_button">Classement</li>
             <li>Crédits</li>
         </ul>
     </div>
@@ -32,9 +33,10 @@
     </div>
     <canvas id="graphics" width="600" height="400"></canvas>
 
-
+    <div id="classement"></div>
 
     <script src="./js/script.js"></script>
+    <script src="./js/ajax.js"></script>
     <script src="./js/menu.js"></script>
 
 
