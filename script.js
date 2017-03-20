@@ -3,13 +3,11 @@ document.addEventListener("DOMContentLoaded", function(event){
   // Variables de l'interface graphique du jeu
   var gameCanvas = document.getElementById("graphics");
   var ctx = gameCanvas.getContext('2d');
-  // Images
-  var weapon = new Image();
-  weapon.src = "src/weapons/weapon_back1.png";
+
   // Déclaration des objets
   var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
   var blocks = new Array();
-  for (i=0; i<12; i++){
+  for (i=0; i<30; i++){
       var block = new Object("src/terrain/p3.png", 28*i+30, 300, 30, 30);
       blocks.push(block);
   }
@@ -17,7 +15,9 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[10] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
   blocks[11] = new Object("src/terrain/p3.png", 120, -50, 30, 30);
   blocks[12] = new Object("src/terrain/p3.png", 250, 250, 30, 30);
-  var monster1 = new Object("src/monsters/m1.png", 190, 220, 24, 32);
+  var monster1 = new Object("src/monsters/m1.png", 190, 220, 28, 30);
+
+  var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 32, 32);
 
   var test = blocks.slice() ;
   test.splice(11,1);
@@ -36,6 +36,11 @@ document.addEventListener("DOMContentLoaded", function(event){
   monster1.weight = 0.3;
   monster1.velocity_y = 3;
   monster1.velocity_x = 2;
+  monster1.pv = 3;
+
+  var attackTime = 0;
+  var attackDelay = 0;
+  var hitDelay = 0;
 
   /* --------------------------------- */
   /* ---------- Ckeckkey ------------- */
@@ -46,12 +51,13 @@ document.addEventListener("DOMContentLoaded", function(event){
   var isLeft = false;
   var isRight = false;
   var isJumping = false;
+  var isAttacking = false;
   var orientation = 'right';
 
   function checkKeyDown(e) {
       e = e || window.event;
       if (e.keyCode == '38') {isJumping = true}
-      if (e.keyCode == '40') {}
+      if (e.keyCode == '32') { if(attackDelay == 0) isAttacking = true}
       if (e.keyCode == '37') { isLeft = true; orientation = 'left'}
       if (e.keyCode == '39') { isRight = true; orientation = 'right'}
   }
@@ -59,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     function checkKeyUp(e) {
       e = e || window.event;
       if (e.keyCode == '38') {isJumping = false}
-      if (e.keyCode == '40') {}
+      if (e.keyCode == '32') {}
       if (e.keyCode == '37') isLeft = false;
       if (e.keyCode == '39') isRight = false;
     }
@@ -84,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     monster1.y += monster1.velocity_y;
     monster1.weight = 0.3;
 
+
     /* -----------------  TRAITEMENT  ---------------- */
     // Déplacements droite / gauche
     if ((isRight == false) && (isLeft == true)) hero.velocity_x = -2;
@@ -100,16 +107,32 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     // Dégats
     if (hero.isColliding(monster1) == 'below'){
-      hero.velocity_y = -5;
+
     }
     if (hero.isColliding(monster1) == 'left'){
-      hero.velocity_y = -2;
       console.log('Aie');
     }
     if (hero.isColliding(monster1) == 'right'){
-      hero.velocity_y = -2;
       console.log('Aie');
     }
+    // Coup d'épée
+    if (monster1.isColliding(weapon) == 'above'){
+      if (hitDelay == 0){
+        monster1.pv -= 1;
+        hitDelay = 30;
+        console.log(hitDelay);
+        if (monster1.pv == 0){
+          monster1.x = -15000;
+          monster1.y = -15000;
+          monster1.velocity_y = 0;
+          monster1.velocity_x = 0;
+          monster1.weight = 0;
+          monster1.gravity = 0;
+        }
+      }
+    }
+    if (hitDelay > 0)
+      hitDelay -= 1;
 
     // Chute
     hero.fall();
@@ -117,6 +140,36 @@ document.addEventListener("DOMContentLoaded", function(event){
     // Saut
     if (isJumping && hero.IsCollidingBelow == true){
       hero.velocity_y = -6;
+    }
+
+    // Attaque
+    if (isAttacking) {
+      attackTime += 1;
+      if (attackTime == 30){
+        isAttacking = false;
+        attackDelay = 30;
+      }
+    }
+    if (attackDelay > 0){
+      attackDelay -= 1;
+      if (attackDelay == 0)
+        attackTime = 0;
+    }
+
+
+    if (orientation == 'left' && isAttacking == true){
+      weapon.sprite.src = "src/weapons/weapon_left1.png";
+      weapon.x = hero.x-hero.width+3;
+      weapon.y = hero.y;
+    }
+    if (orientation == 'right' && isAttacking == true){
+      weapon.sprite.src = "src/weapons/weapon_right1.png" ;
+      weapon.x = hero.x+hero.width-3;
+      weapon.y = hero.y;
+    }
+    if (isAttacking == false){
+      weapon.x = -10000;
+      weapon.y = -10000;
     }
 
     /* -----------------  RENDU  ---------------- */
@@ -128,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     // Placement des monstres
     monster1.render(ctx, 1);
-
+    weapon.render(ctx, 1);
     // Placement du héros
 
     if (isRight && (hero.velocity_y == 0)){
@@ -222,6 +275,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     this.IsCollidingAbove = false;
     this.IsCollidingLeft = false;
     this.IsCollidingRight = false;
+    this.pv = 1;
   }
   /* Object method isColliding
   * Permet de tester si le joueur est contre un autre objet
@@ -311,7 +365,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
   // Premer de créer un rendu de l'objet dans le contexte (en cas d'animation)
   Object.prototype.render = function(context, numberOfFrames){
-    context.clearRect(this.x, this.y, this.width, this.height);
     context.drawImage(
                this.sprite,
                this.frameIndex * this.width,
