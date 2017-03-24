@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[12] = new Object("src/terrain/p3.png", 250, 250, 30, 30);
   var monster1 = new Object("src/monsters/m1.png", 190, 220, 28, 30);
 
-  var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 32, 32);
+  var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
 
   var test = blocks.slice() ;
   test.splice(11,1);
@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function(event){
   monster1.gravity = 1;
   monster1.weight = 0.3;
   monster1.velocity_y = 3;
-  monster1.velocity_x = 2;
-  monster1.pv = 3;
+  monster1.velocity_x = 1.5;
+  monster1.pv = 1;
 
   var attackTime = 0;
   var attackDelay = 0;
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function(event){
       console.log('Aie');
     }
     // Coup d'épée
-    if (monster1.isColliding(weapon) == 'above'){
+    if (monster1.isColliding(weapon) != null){
       if (hitDelay == 0){
         monster1.pv -= 1;
         hitDelay = 30;
@@ -159,13 +159,13 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     if (orientation == 'left' && isAttacking == true){
       weapon.sprite.src = "src/weapons/weapon_left1.png";
-      weapon.x = hero.x-hero.width+3;
-      weapon.y = hero.y;
+      weapon.x = hero.x-weapon.width;
+      weapon.y = hero.y+26;
     }
     if (orientation == 'right' && isAttacking == true){
       weapon.sprite.src = "src/weapons/weapon_right1.png" ;
-      weapon.x = hero.x+hero.width-3;
-      weapon.y = hero.y;
+      weapon.x = hero.x+hero.width-4;
+      weapon.y = hero.y+26;
     }
     if (isAttacking == false){
       weapon.x = -10000;
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
     else if (isLeft && (hero.velocity_y == 0)){
       hero.sprite.src = "src/characters/hero_left.png"
-      this.width = 36;
+      hero.width = 36;
       hero.renderUpdate(3, 6);
       hero.render(ctx, 6);
     }
@@ -202,49 +202,48 @@ document.addEventListener("DOMContentLoaded", function(event){
         hero.frameIndex = 0;
         hero.sprite.src = "src/characters/hero_jump_left.png";
         hero.render(ctx, 1);
-        this.width = 34;
+        hero.width = 36;
       }
       else if (orientation == 'right'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
         hero.sprite.src = "src/characters/hero_jump_right.png";
         hero.render(ctx, 1);
-        this.width = 34;
+        hero.width = 36;
       }
     }
-    else if (hero.velocity_y > 0.3){
+    else if (hero.velocity_y > 0){
       if (orientation == 'left'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
         hero.sprite.src = "src/characters/hero_down_left.png";
         hero.render(ctx, 1);
-        this.width = 34;
+        hero.width = 36;
       }
       else if (orientation == 'right'){
         hero.tickCount = 0;
         hero.frameIndex = 0;
         hero.sprite.src = "src/characters/hero_down_right.png";
         hero.render(ctx, 1);
-        this.width = 34;
+        hero.width = 36;
       }
     }
     else {
-      if (orientation == 'left'){
+      if (orientation == 'left' && hero.velocity_x == 0){
         hero.tickCount = 0;
         hero.frameIndex = 0;
+        hero.width = 36;
         hero.sprite.src = "src/characters/hero_fix_left.png";
         hero.render(ctx, 1);
-        this.width = 32;
       }
-      else if (orientation == 'right') {
+      else if (orientation == 'right' && hero.velocity_x == 0) {
         hero.tickCount = 0;
         hero.frameIndex = 0;
+        hero.width = 36;
         hero.sprite.src = "src/characters/hero_fix_right.png";
         hero.render(ctx, 1);
-        this.width = 32;
       }
     }
-
     requestAnimationFrame(MainLoop, 1000/60);
 
   }
