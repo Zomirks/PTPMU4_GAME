@@ -4,11 +4,15 @@ document.addEventListener("DOMContentLoaded", function(event){
   var gameCanvas = document.getElementById("graphics");
   var ctx = gameCanvas.getContext('2d');
 
+  // Activer la visualisation des barrières
+  var showInvisibleBlocks = false;
+
   // ------------ Déclaration des objets -------------
-  // Héros
+
+  // ------- Héros ---------
   var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
   var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
-  // Blocs
+  // ------- Blocs ---------
   var blocks = new Array();
   for (i=0; i<30; i++){
       var block = new Object("src/terrain/p3.png", 28*i+30, 300, 30, 30);
@@ -17,10 +21,19 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[9] = new Object("src/terrain/p3.png", 30, 200, 30, 30);
   blocks[10] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
   blocks[11] = new Object("src/terrain/p3.png", 120, -50, 30, 30);
-  blocks[12] = new Object("src/terrain/p3.png", 250, 250, 30, 30);
+  blocks[12] = new Object("src/terrain/p3.png", 250, 100, 30, 30);
   var test = blocks.slice() ;
   test.splice(11,1);
-  // Monstres
+  // blocs invisibles
+  if (showInvisibleBlocks == true)
+    invisibleBlockSprite = "show_p_inv";
+  else
+    invisibleBlockSprite = "p_inv";
+  invisibleblocks = new Array();
+  invisibleblocks[0] = new Object("src/terrain/"+invisibleBlockSprite+".png", 280, 270, 30, 30);
+  // liste de tout les blocs
+  allblocks = blocks.concat(invisibleblocks);
+  // ------- Monstres ---------
   var monsters = new Array();
   monsters[0] = new Object("src/monsters/m1.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
   monsters[1] = new Object("src/monsters/m1.png", 180, 270, 28, 30); monsters[1].mtype = 'gr_slime';
@@ -102,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(event){
       monsters[j].y += monsters[j].velocity_y;
       monsters[j].weight = 0.3;
       monsters[j].fall();
-      monsters[j].CollidingEffects(blocks);
+      monsters[j].CollidingEffects(allblocks);
       monsters[j].iaChangePathOnColliding();
     }
 
@@ -135,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     // Délai d'attaque de l'arme avant un nouveau coup
     if (isAttacking) {
       attackTime += 1;
-      if (attackTime == 30){
+      if (attackTime == 17){
         isAttacking = false;
         attackDelay = 30;
       }
@@ -172,6 +185,9 @@ document.addEventListener("DOMContentLoaded", function(event){
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
     for (i=0; i<blocks.length; i++){
       blocks[i].render(ctx, 1);
+    }
+    for (i=0; i<invisibleblocks.length; i++){
+      invisibleblocks[i].render(ctx, 1);
     }
 
     // Placement des monstres
