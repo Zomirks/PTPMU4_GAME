@@ -46,7 +46,7 @@ h1 {
     font-weight: bold;
 }
 
-ul {
+#ulMenu {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,23 +55,23 @@ ul {
     align-items: center;
 }
 
-ul li {
+#ulMenu li {
     cursor: pointer;
     margin-bottom: 20px;
     font-size: 18pt;
 }
 
-li:hover {
+#ulMenu li:hover {
     transform: scale(1.5);
     color: crimson;
 }
 
-li:hover:before {
+#ulMenu li:hover:before {
     content: "* ";
     color: #B17C68;
 }
 
-li:hover:after {
+#ulMenu li:hover:after {
     content: " *";
     color: #B17C68;
 }
@@ -91,6 +91,7 @@ li:hover:after {
 #control p {
     margin-bottom: 25px;
 }
+
 #Arrow {
     border: 1px solid blue;
 }
@@ -116,7 +117,6 @@ li:hover:after {
     margin-top: 20px;
 }
 
-
 #pauseScreen {
     background-color: rgba(105, 105, 105, 0.75);
     display: none;
@@ -133,6 +133,47 @@ li:hover:after {
     -moz-filter: blur(5px);
     -o-filter: blur(5px);
     -ms-filter: blur(5px);
-
     filter: blur(5px);
+}
+
+#ulClassement {
+    margin-top: 20px;
+    font-size: 14pt;
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ulClassement li {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    font-size: 12pt;
+    margin-top: 10px;
+    text-transform: capitalize;
+}
+
+.classementScore {
+    width: 20%;
+    text-align: right;
+}
+
+.classementPosition {
+    width: 20%;
+}
+
+#ulClassement li:nth-child(1) {
+    color: gold;
+    font-size: 18pt;
+}
+
+#ulClassement li:nth-child(2) {
+    color: silver;
+    font-size: 16pt;
+}
+
+#ulClassement li:nth-child(3) {
+    color: chocolate;
+    font-size: 14pt;
 }

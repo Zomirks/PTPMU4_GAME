@@ -4,17 +4,17 @@ try {
     $pdo = new PDO('mysql:host=base.iha.unistra.fr;dbname=jscrew;charset=utf8', 'jscrew', 'fgnUsUt9toikTIls');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	// construction de la requête
-	$sql = 'select * from tableauScore;';
+	$sql = 'select name, score from tableauScore order by score desc;';
 	// exécution de la requête
 	$query = $pdo->query($sql);
- 
+
 	$tab = array();
-	// boucle construisant le résultat 
+	// boucle construisant le résultat
 	while ( $objet = $query->fetch(PDO::FETCH_OBJ) ) {
 		array_push($tab, $objet);
 	}
     //echo $chaine;
-	$result = array('id', 'name', 'score' => $tab);
+	$result = array('name', 'score' => $tab);
 	$pdo = null;
 }
 catch (Exception $e) {
