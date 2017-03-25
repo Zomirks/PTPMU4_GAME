@@ -4,8 +4,11 @@ document.addEventListener("DOMContentLoaded", function(event){
   var gameCanvas = document.getElementById("graphics");
   var ctx = gameCanvas.getContext('2d');
 
-  // Déclaration des objets
+  // ------------ Déclaration des objets -------------
+  // Héros
   var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
+  var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
+  // Blocs
   var blocks = new Array();
   for (i=0; i<30; i++){
       var block = new Object("src/terrain/p3.png", 28*i+30, 300, 30, 30);
@@ -15,32 +18,34 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[10] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
   blocks[11] = new Object("src/terrain/p3.png", 120, -50, 30, 30);
   blocks[12] = new Object("src/terrain/p3.png", 250, 250, 30, 30);
-  var monster1 = new Object("src/monsters/m1.png", 190, 220, 28, 30);
-
-  var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
-
   var test = blocks.slice() ;
   test.splice(11,1);
+  // Monstres
+  var monsters = new Array();
+  monsters[0] = new Object("src/monsters/m1.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
+  monsters[1] = new Object("src/monsters/m1.png", 180, 270, 28, 30); monsters[1].mtype = 'gr_slime';
 
   // Variables concernant l'initation des attributs des objets
   hero.velocity_x = 0;
   hero.velocity_y = 3;
   hero.gravity = 3;
   hero.weight = 0.3;
+  hero.pv = 3;
 
   blocks[11].gravity = 1;
   blocks[11].weight = 0.3;
   blocks[11].velocity_y = 3;
 
-  monster1.gravity = 1;
-  monster1.weight = 0.3;
-  monster1.velocity_y = 3;
-  monster1.velocity_x = 1.5;
-  monster1.pv = 1;
+  for (i=0; i<monsters.length; i++){
+    monsters[i].gravity = 1;
+    monsters[i].weight = 0.3;
+    monsters[i].velocity_y = 3;
+    monsters[i].velocity_x = 1.5;
+    monsters[i].pv = 1;
+  }
 
   var attackTime = 0;
   var attackDelay = 0;
-  var hitDelay = 0;
 
   /* --------------------------------- */
   /* ---------- Ckeckkey ------------- */
@@ -86,9 +91,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     blocks[11].x += blocks[11].velocity_x;
     blocks[11].y += blocks[11].velocity_y;
     blocks[11].weight = 0.3;
-    monster1.x += monster1.velocity_x;
-    monster1.y += monster1.velocity_y;
-    monster1.weight = 0.3;
 
 
     /* -----------------  TRAITEMENT  ---------------- */
@@ -101,38 +103,44 @@ document.addEventListener("DOMContentLoaded", function(event){
     // Effets des collisions
     hero.HeroCollidingEffects(blocks);
     blocks[11].CollidingEffects(test);
-    monster1.CollidingEffects(blocks);
-    monster1.iaChangePathOnColliding();
-    monster1.fall();
+
+    // Effets des monstres
+    for (j=0; j<monsters.length; j++){
+      monsters[j].x += monsters[j].velocity_x;
+      monsters[j].y += monsters[j].velocity_y;
+      monsters[j].weight = 0.3;
+      monsters[j].fall();
+      monsters[j].CollidingEffects(blocks);
+      monsters[j].iaChangePathOnColliding();
 
     // Dégats
-    if (hero.isColliding(monster1) == 'below'){
-
+    if (hero.isColliding(monsters[j]) != null){
+      if (hero.hitDelay == 0){
+        hero.pv -= 1;
+        console.log('Aie !'+hero.pv);
+        hero.hitDelay = 100;
+      }
     }
-    if (hero.isColliding(monster1) == 'left'){
-      console.log('Aie');
-    }
-    if (hero.isColliding(monster1) == 'right'){
-      console.log('Aie');
-    }
+    if (hero.hitDelay > 0)
+      hero.hitDelay -= 1;
     // Coup d'épée
-    if (monster1.isColliding(weapon) != null){
-      if (hitDelay == 0){
-        monster1.pv -= 1;
-        hitDelay = 30;
-        console.log(hitDelay);
-        if (monster1.pv == 0){
-          monster1.x = -15000;
-          monster1.y = -15000;
-          monster1.velocity_y = 0;
-          monster1.velocity_x = 0;
-          monster1.weight = 0;
-          monster1.gravity = 0;
+    if (monsters[j].isColliding(weapon) != null){
+      if (monsters[j].hitDelay == 0){
+        monsters[j].pv -= 1;
+        monsters[j].hitDelay = 30;
+        if (monsters[j].pv == 0){
+          monsters[j].x = -15000;
+          monsters[j].y = -15000;
+          monsters[j].velocity_y = 0;
+          monsters[j].velocity_x = 0;
+          monsters[j].weight = 0;
+          monsters[j].gravity = 0;
         }
       }
     }
-    if (hitDelay > 0)
-      hitDelay -= 1;
+    if (monsters[j].hitDelay > 0)
+      monsters[j].hitDelay -= 1;
+  }
 
     // Chute
     hero.fall();
@@ -172,6 +180,11 @@ document.addEventListener("DOMContentLoaded", function(event){
       weapon.y = -10000;
     }
 
+    // Défaite
+    if ((hero.pv == 0) || (hero.y > 500)){
+      console.log('game-over');
+    }
+
     /* -----------------  RENDU  ---------------- */
     // Placement des objets sur le terrain
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -180,7 +193,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     // Placement des monstres
-    monster1.render(ctx, 1);
+    for (i=0;i<monsters.length;i++)
+    monsters[i].render(ctx, 1);
     weapon.render(ctx, 1);
     // Placement du héros
 
@@ -275,6 +289,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     this.IsCollidingLeft = false;
     this.IsCollidingRight = false;
     this.pv = 1;
+    this.hitDelay = 0;
+    this.mtype; // type du monstre
   }
   /* Object method isColliding
   * Permet de tester si le joueur est contre un autre objet
