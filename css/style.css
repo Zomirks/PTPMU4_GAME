@@ -177,3 +177,15 @@ h1 {
     color: chocolate;
     font-size: 14pt;
 }
+
+#retourMenu {
+    color: aliceblue;
+    margin-top: 30px;
+    font-size: 16pt;
+    text-align: center;
+    cursor: pointer;
+}
+
+#retourMenu:hover {
+    transform: scale(1.5);
+}
