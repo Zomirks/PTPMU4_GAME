@@ -92,19 +92,11 @@ document.addEventListener("DOMContentLoaded", function(event){
     blocks[11].y += blocks[11].velocity_y;
     blocks[11].weight = 0.3;
 
-
+    /* ----------------------------------------------- */
     /* -----------------  TRAITEMENT  ---------------- */
-    // Déplacements droite / gauche
-    if ((isRight == false) && (isLeft == true)) hero.velocity_x = -2;
-    else if ((isRight == true) && (isLeft == false)) hero.velocity_x = 2;
-    else if ((isRight == true) && (isLeft == true)) hero.velocity_x = 0;
-    else hero.velocity_x = 0;
+    /* ----------------------------------------------- */
 
-    // Effets des collisions
-    hero.HeroCollidingEffects(blocks);
-    blocks[11].CollidingEffects(test);
-
-    // Effets des monstres
+    // -------------- Effets des effets propres aux monstres ---------------
     for (j=0; j<monsters.length; j++){
       monsters[j].x += monsters[j].velocity_x;
       monsters[j].y += monsters[j].velocity_y;
@@ -112,35 +104,18 @@ document.addEventListener("DOMContentLoaded", function(event){
       monsters[j].fall();
       monsters[j].CollidingEffects(blocks);
       monsters[j].iaChangePathOnColliding();
+    }
 
-    // Dégats
-    if (hero.isColliding(monsters[j]) != null){
-      if (hero.hitDelay == 0){
-        hero.pv -= 1;
-        console.log('Aie !'+hero.pv);
-        hero.hitDelay = 100;
-      }
-    }
-    if (hero.hitDelay > 0)
-      hero.hitDelay -= 1;
-    // Coup d'épée
-    if (monsters[j].isColliding(weapon) != null){
-      if (monsters[j].hitDelay == 0){
-        monsters[j].pv -= 1;
-        monsters[j].hitDelay = 30;
-        if (monsters[j].pv == 0){
-          monsters[j].x = -15000;
-          monsters[j].y = -15000;
-          monsters[j].velocity_y = 0;
-          monsters[j].velocity_x = 0;
-          monsters[j].weight = 0;
-          monsters[j].gravity = 0;
-        }
-      }
-    }
-    if (monsters[j].hitDelay > 0)
-      monsters[j].hitDelay -= 1;
-  }
+    // ------------- Traitements des effets et interactions du héros ----------------
+    // Déplacements droite / gauche
+    if ((isRight == false) && (isLeft == true)) hero.velocity_x = -2;
+    else if ((isRight == true) && (isLeft == false)) hero.velocity_x = 2;
+    else if ((isRight == true) && (isLeft == true)) hero.velocity_x = 0;
+    else hero.velocity_x = 0;
+
+    // Collisions contre les blocs
+    hero.HeroCollidingEffects(blocks);
+    blocks[11].CollidingEffects(test);
 
     // Chute
     hero.fall();
@@ -150,7 +125,14 @@ document.addEventListener("DOMContentLoaded", function(event){
       hero.velocity_y = -6;
     }
 
-    // Attaque
+    // Dégats (monstre sur héros)
+    hero.takeDamageFromTab(monsters);
+    // Coup d'épée (héros sur monstre)
+    for (j=0;j<monsters.length;j++){
+      monsters[j].takeDamageFromObject(weapon);
+    }
+
+    // Délai d'attaque de l'arme avant un nouveau coup
     if (isAttacking) {
       attackTime += 1;
       if (attackTime == 30){
@@ -164,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         attackTime = 0;
     }
 
-
+    // Orientation de l'arme
     if (orientation == 'left' && isAttacking == true){
       weapon.sprite.src = "src/weapons/weapon_left1.png";
       weapon.x = hero.x-weapon.width;
@@ -372,7 +354,39 @@ document.addEventListener("DOMContentLoaded", function(event){
       }
     }
   }
-
+  // Dommage provoqué par un tableau d'objet sur un autre objet
+  Object.prototype.takeDamageFromTab = function(tab){
+    for (j=0; j<tab.length; j++){
+      if (this.isColliding(tab[j]) != null){
+        if (this.hitDelay == 0){
+          this.pv -= 1;
+          this.hitDelay = 100;
+        }
+      }
+      if (this.hitDelay > 0)
+        this.hitDelay -= 1;
+    }
+  }
+  // Dommage provoqué par un objet sur un autre objet
+  Object.prototype.takeDamageFromObject = function(obj){
+      if (this.isColliding(obj) != null){
+        if (this.hitDelay == 0){
+          this.pv -= 1;
+          this.hitDelay = 30;
+          if (this.pv == 0){
+            this.x = -15000;
+            this.y = -15000;
+            this.velocity_y = 0;
+            this.velocity_x = 0;
+            this.weight = 0;
+            this.gravity = 0;
+          }
+        }
+      }
+      if (this.hitDelay > 0)
+        this.hitDelay -= 1;
+  }
+  // Chute
   Object.prototype.fall = function(){
     if (this.velocity_y < this.gravity && this.IsCollidingBelow == false)
       this.velocity_y += this.weight;
@@ -402,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         this.frameIndex = 0;
     }
   }
-
+  // Retourne la direction
   Object.prototype.getDirectionByVelocityX = function(){
     if (this.velocity_x < 0)
       return 'isLeft';
@@ -412,10 +426,12 @@ document.addEventListener("DOMContentLoaded", function(event){
       return 'fixed';
   }
 
-  // Fonction IA
+  // Fonction IA des monstres
+  // Mouvements latéraux des monstres
   Object.prototype.iaLateralMoving = function(speed){
     this.velocity_x = speed;
   }
+  // Changement de direction d'un monstre à la rencontre d'un obstacle
   Object.prototype.iaChangePathOnColliding = function(speed){
     if (this.IsCollidingLeft == true || this.IsCollidingRight == true)
       this.iaLateralMoving(-this.velocity_x);
