@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event){
 
   // Activer la visualisation des barrières
   var showInvisibleBlocks = false;
+  // Activer la vue des informations par défaut (appuyer sur "i" pour activer/désactiver)
+  var showInformation = false;
 
   // ------------ Déclaration des objets -------------
 
@@ -36,7 +38,9 @@ document.addEventListener("DOMContentLoaded", function(event){
   // ------- Monstres ---------
   var monsters = new Array();
   monsters[0] = new Object("src/monsters/m1.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
-  monsters[1] = new Object("src/monsters/m1.png", 180, 270, 28, 30); monsters[1].mtype = 'gr_slime';
+  monsters[1] = new Object("src/monsters/m1.png", 160, 270, 28, 30); monsters[1].mtype = 'gr_slime';
+  // ------ Effets ---------
+  var killAnimations = new Array();
 
   // Variables concernant l'initation des attributs des objets
   hero.velocity_x = 0;
@@ -54,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     monsters[i].weight = 0.3;
     monsters[i].velocity_y = 3;
     monsters[i].velocity_x = 1.5;
-    monsters[i].pv = 1;
+    monsters[i].pv = 3;
   }
 
   var attackTime = 0;
@@ -78,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function(event){
       if (e.keyCode == '32') { if(attackDelay == 0) isAttacking = true}
       if (e.keyCode == '37') { isLeft = true; orientation = 'left'}
       if (e.keyCode == '39') { isRight = true; orientation = 'right'}
+      if(e.keyCode == '73') { showInformation = !showInformation}
   }
 
     function checkKeyUp(e) {
@@ -181,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     }
 
     /* -----------------  RENDU  ---------------- */
-    // Placement des objets sur le terrain
+    // Placement des blocs sur le terrain
     ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
     for (i=0; i<blocks.length; i++){
       blocks[i].render(ctx, 1);
@@ -190,12 +195,37 @@ document.addEventListener("DOMContentLoaded", function(event){
       invisibleblocks[i].render(ctx, 1);
     }
 
-    // Placement des monstres
-    for (i=0;i<monsters.length;i++)
-    monsters[i].render(ctx, 1);
-    weapon.render(ctx, 1);
-    // Placement du héros
+    // Placement des effets
+    /* Animation quand un monstre est vaincu*/
+    if (killAnimations[0] != null){
+      for (i=0; i<killAnimations.length; i++){
+        killAnimations[i].render(ctx, 1);
+        killAnimations[i].renderUpdate(3, 7);
+        if (killAnimations[i].frameIndex == 6){
+          killAnimations.splice(i,1);
+          console.log(killAnimations);
+        }
+      }
+    }
 
+    // Placement des monstres
+    for (i=0;i<monsters.length;i++){
+      if (monsters[i].hitDelay > 0){
+        monsters[i].renderUpdate(3, 3);
+        monsters[i].render(ctx, 1);
+        if (monsters[i].frameIndex == 0);
+          monsters[i].frameIndex = 1;
+      }
+      else {
+        monsters[i].frameIndex = 0;
+        monsters[i].render(ctx, 1);
+      }
+    }
+
+    // Placement de l'arme
+    weapon.render(ctx, 1);
+
+    // Placement du héros
     if (isRight && (hero.velocity_y == 0)){
       hero.sprite.src = "src/characters/hero_right.png"
       hero.width = 36;
@@ -255,6 +285,19 @@ document.addEventListener("DOMContentLoaded", function(event){
         hero.sprite.src = "src/characters/hero_fix_right.png";
         hero.render(ctx, 1);
       }
+    }
+
+    // Affichage des informations
+    if (showInformation == true){
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.font = '14pt Arial';
+      for(i=0;i<hero.pv;i++)
+        ctx.fillText('♥',540+(i*11),20);
+      ctx.font = '10pt Calibri';
+      ctx.fillText('x: '+Math.round(hero.x),540,30);
+      ctx.fillText('y: '+Math.round(hero.y),540,40);
+      ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,540,50);
+      ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,540,60);
     }
     requestAnimationFrame(MainLoop, 1000/60);
 
@@ -390,6 +433,8 @@ document.addEventListener("DOMContentLoaded", function(event){
           this.pv -= 1;
           this.hitDelay = 30;
           if (this.pv == 0){
+            var killAnimation = new Object("src/effects/kill_animation.png", this.x, this.y, 52, 52);
+            killAnimations.push(killAnimation);
             this.x = -15000;
             this.y = -15000;
             this.velocity_y = 0;
@@ -452,6 +497,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     if (this.IsCollidingLeft == true || this.IsCollidingRight == true)
       this.iaLateralMoving(-this.velocity_x);
   }
+
+
 
   /* --------------------------------- */
   /* ---------- Execution ------------ */
