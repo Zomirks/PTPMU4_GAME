@@ -30,8 +30,6 @@ function gameStart() {
     blocks[15] = new Object("./src/terrain/p3.png", 540, 280, 30, 30);
     blocks[16] = new Object("./src/terrain/p3.png", 570, 250, 30, 30);
 
-    var ghost = new Object("./src/ghost.png", 260, 260, 40, 40);
-    var slime = new Object("./src/slime.png", 200, 258, 50, 50);
     // Variables concernant l'initation des attributs des objets
     hero.velocity_x = 0;
     hero.velocity_y = 3;
@@ -248,14 +246,73 @@ function gameStart() {
             var myBody = document.getElementById("body");
             var deathMessage = document.createElement("div");
             deathMessage.setAttribute("id", "deathMessage");
-
-
-            deathMessage.innerHTML = '<p>You won!</p><p class="maybe">... (or maybe not)</p><a href="./index.html">Menu</div>';
+            deathMessage.innerHTML = '<p>You won!</p><p class="maybe">... (or maybe not)';
+            
             myBody.appendChild(deathMessage);
+            
+            var formulaireInsert = document.createElement("form");
+            formulaireInsert.setAttribute('id', 'formInsert');
+            formulaireInsert.setAttribute('method', 'post');
+            formulaireInsert.setAttribute('enctype', 'multipart/form-data');
+            deathMessage.appendChild(formulaireInsert);
+            
+            var inputId = document.createElement("input");
+            inputId.setAttribute('type', 'hidden');
+            inputId.readOnly = true;
+            inputId.setAttribute('name', 'id');
+            formulaireInsert.appendChild(inputId);
+            
+            var inputName = document.createElement("input");
+            inputName.setAttribute('type', 'text');
+            inputName.setAttribute('id', 'name');
+            inputName.setAttribute('name', 'name');
+            inputName.setAttribute('placeholder', 'Votre Pseudo');
+            formulaireInsert.appendChild(inputName);
+            
+            var inputScore = document.createElement("input");
+            inputScore.setAttribute('type', 'number');
+//            inputScore.readOnly = true;
+            inputScore.setAttribute('id', 'score');
+            inputScore.setAttribute('name', 'score');
+            formulaireInsert.appendChild(inputScore);
+            
+            var submit = document.createElement("input");
+            submit.setAttribute('type', 'submit');
+            submit.setAttribute('id', 'envoyer');
+            submit.setAttribute('value', 'Envoyer');
+            formulaireInsert.appendChild(submit);
+            
+            $(document).ready(function () {
+                $("#formInsert").on('submit', function(e) {
+                     e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
+
+                    var $this = $(this); // L'objet jQuery du formulaire
+
+                    // Je récupère les valeurs
+                    var name = $('#name').val();
+                    var score = $('#score').val();
+
+                    // Je vérifie une première fois pour ne pas lancer la requête HTTP
+                    // si je sais que mon PHP renverra une erreur
+                    if(name === '' || score === '') {
+                        alert('Les champs doivent êtres remplis');
+                    } else {
+                        // Envoi de la requête HTTP en mode asynchrone
+                        $.ajax({
+                            url:  "./php/insert.php",
+                            type: $this.attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+                            data: $this.serialize(),
+                            success: function(html) { // Je récupère la réponse du fichier PHP
+                                deathMessage.removeChild(formulaireInsert);
+                                deathMessage.innerHTML += '<a href="./index.html">Menu</div>';
+                                console.log("Nouveau score entré dans le classement général");
+                            }
+                        });
+                    }
+                });
+            });
         }
 
-        slime.render(ctx, 1);
-        ghost.render(ctx, 1);
         life.render(ctx, 1);
         AnimationLoop = requestAnimationFrame(MainLoop, 1000 / 60);
 
