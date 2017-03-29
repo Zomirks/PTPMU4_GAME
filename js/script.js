@@ -90,6 +90,10 @@ function gameStart() {
       // ------ Effets ---------
       var killAnimations = new Array();
 
+      //  ------ Pièces ------
+      var coins = new Array();
+      coins[0] = new Object("src/terrain/coin.png", 190, 220, 32, 33);
+      coins[1] = new Object("src/terrain/coin.png", 200, 100, 32, 33);
       // Variables concernant l'initation des attributs des objets
       hero.velocity_x = 0;
       hero.velocity_y = 3;
@@ -375,6 +379,12 @@ function gameStart() {
           endGame(score)
         }
 
+        for(i=0; i<coins.length; i++) {
+        if(hero.isColliding(coins[i])) {
+          IncrementScore(10);
+          console.log(score);
+        }
+      }
         // ------------- Traitements des effets et interactions des blocs ----------------
         blocks[3].CollidingEffects(test);
 
@@ -398,6 +408,10 @@ function gameStart() {
         /* Blocs invisibles */
         for (i=0; i<invisibleBlocks.length; i++){
           invisibleBlocks[i].renderBlocks(ctx);
+        }
+
+        for (i=0; i<coins.length; i++){
+            coins[i].renderBlocks(ctx);
         }
 
         // Placement des effets sur le terrain
