@@ -330,6 +330,12 @@ document.addEventListener("DOMContentLoaded", function(event){
       }
     }
 
+    // Placement des données visuelles
+    var imgHealth = new Image();
+    imgHealth.src = 'src/effects/health.png';
+    for(i=0;i<hero.pv;i++)
+      ctx.drawImage(imgHealth,540+(i*15),10);
+
     // Placement de la caméra sur le terrain
     updateRenderOffsetX();
 
@@ -341,14 +347,11 @@ document.addEventListener("DOMContentLoaded", function(event){
     // Mode d'affichage des informations
     if (showInformation == true){
       ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.font = '14pt Arial';
-      for(i=0;i<hero.pv;i++)
-        ctx.fillText('♥',540+(i*11),20);
       ctx.font = '10pt Calibri';
-      ctx.fillText('x: '+Math.round(hero.x),540,30);
-      ctx.fillText('y: '+Math.round(hero.y),540,40);
-      ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,540,50);
-      ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,540,60);
+      ctx.fillText('x: '+Math.round(hero.x),540,40);
+      ctx.fillText('y: '+Math.round(hero.y),540,50);
+      ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,540,60);
+      ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,540,70);
     }
 
 
