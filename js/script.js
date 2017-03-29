@@ -107,7 +107,7 @@ function gameStart() {
 
         ArrowControl.addEventListener("click", function(event) {
             ZQSDControl.style.border = "none";
-            ArrowControl.style.border = "1px solid blue";
+            ArrowControl.style.border = "1px solid #ff6600";
             controlJump = "38";
             controlDown = "40";
             controlRight = "39";
@@ -116,7 +116,7 @@ function gameStart() {
 
         ZQSDControl.addEventListener("click", function(event) {
             ArrowControl.style.border = "none";
-            ZQSDControl.style.border = "1px solid blue";
+            ZQSDControl.style.border = "1px solid #ff6600";
             controlJump = "90";
             controlDown = "83";
             controlRight = "68";
