@@ -33,7 +33,7 @@ function gameStart() {
       blocks[4] = new Object("src/terrain/p3.png", 250, 150, 30, 6*28);
       blocks[5] = new Object("src/terrain/p1.png", 350, 250, 30, 10*28);
       blocks[6] = new Object("src/terrain/p3.png", 460, 220, 30, 30);
-      blocks[7] = new Object("src/terrain/door.png", 600-4, 166, 84, 30);
+      blocks[7] = new Object("src/terrain/door.png", 600-4, 10066, 84, 30);
       blocks[8] = new Object("src/terrain/p1.png", 600, 136, 30, 30);
       blocks[9] = new Object("src/terrain/p1.png", 600, 106, 30, 30);
       blocks[10] = new Object("src/terrain/p1.png", 600, 76, 30, 30);
@@ -88,7 +88,10 @@ function gameStart() {
       monsters[3] = new Object("src/monsters/rodeur_left.png", 930, 220-42, 42, 34); monsters[3].mtype = 'rodeur';
       monsters[4] = new Object("src/monsters/rodeur_left.png", 1300, 250-42, 42, 34); monsters[4].mtype = 'rodeur';
       // ------ Effets ---------
-      var killAnimations = new Array();
+      var killAnimations = new Array(); // animations lorsqu'un monstre est vaincu
+
+      var levitateEffect = 0; // animations des rodeurs
+
 
       // Variables concernant l'initation des attributs des objets
       hero.velocity_x = 0;
@@ -300,7 +303,17 @@ function gameStart() {
           monsters[j].fall();
           monsters[j].CollidingEffects(allblocks);
           monsters[j].iaChangePathOnColliding();
+          if (monsters[j].mtype == 'rodeur') {
+            if (levitateEffect >= 50 && levitateEffect < 100)
+              monsters[j].velocity_y = -0.15;
+            else if (levitateEffect >= 100)
+              levitateEffect = 0;
+            }
         }
+        levitateEffect++;
+        console.log(levitateEffect);
+        // mouvement des rodeurs
+
 
         // ------------- Traitements des effets et interactions du héros ----------------
         // Déplacements droite / gauche
@@ -770,7 +783,7 @@ function gameStart() {
         }
         else if (this.mtype == "rodeur"){
           this.velocity_x = 1;
-          this.gravity = 1;
+          this.gravity = 0.1;
           this.pv = 5;
           this.degat = 2;
           this.points = 50;
