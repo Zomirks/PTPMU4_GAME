@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function(event){
+function gameStart(){
 
   // Variables de l'interface graphique du jeu
   var gameCanvas = document.getElementById("graphics");
@@ -653,4 +653,4 @@ document.addEventListener("DOMContentLoaded", function(event){
   /* --------------------------------- */
   MainLoop();
 
-});
+}
