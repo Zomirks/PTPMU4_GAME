@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event){
   // ------- Héros ---------
   var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
   var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
+  var score = 0;
 
   // ------- Blocs ---------
   // plateformes normales solides, avec des tiles graphiques
@@ -67,15 +68,6 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[3].gravity = 1;
   blocks[3].weight = 0.3;
   blocks[3].velocity_y = 3;
-
-  for (i=0; i<monsters.length; i++){
-    monsters[i].gravity = 1;
-    monsters[i].weight = 0.3;
-    monsters[i].velocity_y = 3;
-    monsters[i].velocity_x = 1.5;
-    monsters[i].pv = 3;
-    monsters[i].degat = 1;
-  }
 
   for (i=0; i<damageBlocks.length; i++){
     damageBlocks[i].degat = 1;
@@ -394,6 +386,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     this.degat = 0;
     // Variables cibles
     this.mtype; // type dans le cas d'un monstre
+    this.points; // les points à gagner dans le cas d'un monstre vaincu
     this.color; // pour la couleur d'un objet à remplir
   }
   /* Object method isColliding
@@ -503,6 +496,7 @@ document.addEventListener("DOMContentLoaded", function(event){
           this.hitDelay = 30;
           if (this.pv <= 0){
             this.pv = 0;
+            IncrementScore(this.points);
             var killAnimation = new Object("src/effects/kill_animation.png", this.x, this.y, 52, 52);
             killAnimations.push(killAnimation);
             this.x = -15000;
@@ -517,6 +511,7 @@ document.addEventListener("DOMContentLoaded", function(event){
       if (this.hitDelay > 0)
         this.hitDelay -= 1;
   }
+
   // Gestion de la chute d'un objet
   Object.prototype.fall = function(){
     if (this.velocity_y < this.gravity && this.IsCollidingBelow == false)
@@ -580,7 +575,26 @@ document.addEventListener("DOMContentLoaded", function(event){
       return 'fixed';
   }
 
-  // Fonction IA des monstres
+  /* ---------- Fonctions relatives aux Monstres -----------  */
+
+  // Définition des types de monstres
+  Object.prototype.monsterSetAttributes = function(){
+    this.gravity = 1;
+    this.weight = 0.3;
+    this.velocity_y = 3;
+    this.velocity_x = 1.5;
+    if (this.mtype = "gr_slime"){
+      this.pv = 3;
+      this.degat = 1;
+      this.points = 10;
+    }
+  }
+  // Initiation de la fonction
+  for (i=0; i<monsters.length; i++){
+    monsters[i].monsterSetAttributes();
+  }
+
+  // Fonctions IA des monstres
   // Mouvements latéraux des monstres
   Object.prototype.iaLateralMoving = function(speed){
     this.velocity_x = speed;
@@ -625,6 +639,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         camera.x = camera.x+hero.velocity_x;
       }
     }
+  }
+
+  /* ------ Score ------ */
+
+  function IncrementScore(points){
+    score = score + points;
+
   }
 
   /* --------------------------------- */
