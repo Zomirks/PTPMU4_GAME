@@ -359,7 +359,7 @@ function gameStart() {
         }
 
         // Défaite
-        if ((hero.pv == 0) || (hero.y > 450) && (deathScreen == false)){
+        if ((hero.pv <= 0) || (hero.y > 450) && (deathScreen == false)){
           endGame(score);
             console.log(score);
         }
