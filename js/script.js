@@ -11,7 +11,7 @@ function gameStart() {
     var AnimationLoop;
     var isPause = false;
 
- 
+
 
       /* ---------------------------------------------- */
       /* ---------- Déclaration des objets ------------ */
@@ -51,13 +51,16 @@ function gameStart() {
       /* blocs invisibles */
       invisibleBlocks = new Array();
       invisibleBlocks[0] = new Object("src/terrain/"+invisibleBlockSprite+".png", 310, 270, 30, 30);
+      invisibleBlocks[1] = new Object("src/terrain/"+invisibleBlockSprite+".png", 220, 120, 30, 30);
+      invisibleBlocks[2] = new Object("src/terrain/"+invisibleBlockSprite+".png", 220+7*28, 120, 30, 30);
       // liste de tout les blocs solides
       allblocks = blocks.concat(invisibleBlocks);
       console.log(allblocks);
       // ------- Monstres ---------
       var monsters = new Array();
-      monsters[0] = new Object("src/monsters/m1.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
-      monsters[1] = new Object("src/monsters/m1.png", 160, 270, 28, 30); monsters[1].mtype = 'gr_slime';
+      monsters[0] = new Object("src/monsters/gr_slime_left.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
+      monsters[1] = new Object("src/monsters/gr_slime_right.png", 160, 270, 28, 30); monsters[1].mtype = 'gr_slime';
+      monsters[2] = new Object("src/monsters/rodeur_left.png", 274, 106, 42, 34); monsters[2].mtype = 'rodeur';
       // ------ Effets ---------
       var killAnimations = new Array();
 
@@ -66,7 +69,7 @@ function gameStart() {
       hero.velocity_y = 3;
       hero.gravity = 3;
       hero.weight = 0.3;
-      hero.pv = 3;
+      hero.pv = 5;
 
       blocks[3].gravity = 1;
       blocks[3].weight = 0.3;
@@ -202,7 +205,7 @@ function gameStart() {
             submit.setAttribute('id', 'envoyer');
             submit.setAttribute('value', 'Envoyer');
             formulaireInsert.appendChild(submit);
-            
+
             $(document).ready(function () {
                 $("#formInsert").on('submit', function(e) {
                     e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
@@ -374,6 +377,12 @@ function gameStart() {
 
         // Placement des monstres sur le terrain
         for (i=0;i<monsters.length;i++){
+          // changement du sprite selon l'orientation
+          if (monsters[i].getDirectionByVelocityX() == 'isLeft')
+            monsters[i].sprite.src = "src/monsters/"+monsters[i].mtype+"_left.png";
+          if (monsters[i].getDirectionByVelocityX() == 'isRight')
+            monsters[i].sprite.src = "src/monsters/"+monsters[i].mtype+"_right.png";
+          // Animations de dégât
           if (monsters[i].hitDelay > 0){
             monsters[i].renderUpdate(3, 3);
             monsters[i].render(ctx);
@@ -455,7 +464,10 @@ function gameStart() {
         var imgHealth = new Image();
         imgHealth.src = 'src/effects/health.png';
         for(i=0;i<hero.pv;i++)
-          ctx.drawImage(imgHealth,540+(i*15),10);
+          ctx.drawImage(imgHealth,560-(i*15),10);
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.font = '12pt Calibri';
+        ctx.fillText('Score: '+score,520,40);
 
         // Placement de la caméra sur le terrain
         updateRenderOffsetX();
@@ -468,11 +480,11 @@ function gameStart() {
         // Mode d'affichage des informations
         if (showInformation == true){
           ctx.fillStyle = 'rgba(255,255,255,0.7)';
-          ctx.font = '10pt Calibri';
-          ctx.fillText('x: '+Math.round(hero.x),540,40);
-          ctx.fillText('y: '+Math.round(hero.y),540,50);
-          ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,540,60);
-          ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,540,70);
+          ctx.font = '12pt Calibri';
+          ctx.fillText('x: '+Math.round(hero.x),520,60);
+          ctx.fillText('y: '+Math.round(hero.y),520,75);
+          ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,520,90);
+          ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,520,105);
         }
 
 
@@ -711,11 +723,18 @@ function gameStart() {
         this.gravity = 1;
         this.weight = 0.3;
         this.velocity_y = 3;
-        this.velocity_x = 1.5;
-        if (this.mtype = "gr_slime"){
+        if (this.mtype == "gr_slime"){
+          this.velocity_x = 1.5;
           this.pv = 3;
           this.degat = 1;
           this.points = 10;
+        }
+        else if (this.mtype == "rodeur"){
+          this.velocity_x = 1;
+          this.gravity = 1;
+          this.pv = 5;
+          this.degat = 2;
+          this.points = 50;
         }
       }
       // Initiation de la fonction
