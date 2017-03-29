@@ -88,7 +88,10 @@ function gameStart() {
       monsters[3] = new Object("src/monsters/rodeur_left.png", 930, 220-42, 42, 34); monsters[3].mtype = 'rodeur';
       monsters[4] = new Object("src/monsters/rodeur_left.png", 1300, 250-42, 42, 34); monsters[4].mtype = 'rodeur';
       // ------ Effets ---------
-      var killAnimations = new Array();
+      var killAnimations = new Array(); // animations lorsqu'un monstre est vaincu
+
+      var flyEffect = 0; // animations des rodeurs
+
 
       //  ------ Pièces ------
       var coins = new Array();
@@ -304,7 +307,17 @@ function gameStart() {
           monsters[j].fall();
           monsters[j].CollidingEffects(allblocks);
           monsters[j].iaChangePathOnColliding();
+          if (monsters[j].mtype == 'rodeur') {
+            if (flyEffect >= 50 && flyEffect < 100)
+              monsters[j].velocity_y = -0.15;
+            else if (flyEffect >= 100)
+              flyEffect = 0;
+            }
         }
+        flyEffect++;
+        console.log(flyEffect);
+        // mouvement des rodeurs
+
 
         // ------------- Traitements des effets et interactions du héros ----------------
         // Déplacements droite / gauche
@@ -375,7 +388,7 @@ function gameStart() {
           blocks[7].y = -30000;
         }
         if (hero.isColliding(chest)){
-          score = score + 100;
+          score = score + (100*hero.pv);
           endGame(score)
         }
 
@@ -784,7 +797,7 @@ function gameStart() {
         }
         else if (this.mtype == "rodeur"){
           this.velocity_x = 1;
-          this.gravity = 1;
+          this.gravity = 0.1;
           this.pv = 5;
           this.degat = 2;
           this.points = 50;
