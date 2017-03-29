@@ -25,14 +25,15 @@ document.addEventListener("DOMContentLoaded", function(event){
   blocks[1] = new Object("src/terrain/p3.png", 30, 200, 30, 30);
   blocks[2] = new Object("src/terrain/p3.png", 120, 250, 30, 30);
   blocks[3] = new Object("src/terrain/p3.png", 120, -50, 30, 30);
-  blocks[4] = new Object("src/terrain/p3.png", 250, 150, 30, 7*28);
+  blocks[4] = new Object("src/terrain/p3.png", 250, 150, 30, 6*28);
   blocks[5] = new Object("src/terrain/p1.png", 350, 250, 30, 10*28);
+  blocks[6] = new Object("src/terrain/p3.png", 460, 220, 30, 30);
   // blocs provoquant des dommages (piques)
   var damageBlocks = new Array();
-  // damageBlocks[0] = new Object("src/terrain/sp1.png", 378, 220, 30, 30);
+  damageBlocks[0] = new Object("src/terrain/sp1.png", 490, 221, 30, 2*30);
   // blocs unicolores solides
   var fillBlocks = new Array();
-  fillBlocks[0] = new Object("src/terrain/p1.png", 250, 180, 300, 7*28+2); fillBlocks[0].color = '#586730';
+  fillBlocks[0] = new Object("src/terrain/p1.png", 250, 180, 300, 6*28+2); fillBlocks[0].color = '#586730';
   fillBlocks[1] = new Object("src/terrain/p1.png", 30, 330, 100, 10*28+2); fillBlocks[1].color = '#55412F';
   fillBlocks[2] = new Object("src/terrain/p1.png", 350, 280, 300, 10*28+2); fillBlocks[2].color = '#55412F';
   // blocs mobiles
@@ -165,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     hero.fall();
     // Saut
     if (isJumping && hero.IsCollidingBelow == true){
-      hero.velocity_y = -6;
+      hero.velocity_y = -6.5;
     }
 
     // Dégats : monstre sur héros
@@ -481,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function(event){
   // Dommage provoqué par un tableau d'objet sur un autre objet
   Object.prototype.takeDamageFromTab = function(tab){
     for (j=0; j<tab.length; j++){
-      if (this.isColliding(tab[j], 10, 5) != null){
+      if (this.isColliding(tab[j], 13, 5) != null){
         if (this.hitDelay == 0){
           this.pv -= tab[j].degat;
           this.hitDelay = 100;
