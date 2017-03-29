@@ -138,16 +138,35 @@ h1 {
     filter: blur(5px);
 }
 
+#ulClassement::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+}
+
+#ulClassement::-webkit-scrollbar
+{
+	width: 12px;
+}
+
+#ulClassement::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
 #ulClassement {
-    height: 250px;
     font-size: 14pt;
     font-weight: normal;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: scroll;
 }
 
 #ulClassement li {
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     width: 80%;
