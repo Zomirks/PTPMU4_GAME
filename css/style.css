@@ -14,13 +14,13 @@ body {
     background-color: #B17C68;
     position: absolute;
     top: 200px;
-    margin: auto;    
+    margin: auto;
 }
 
 #menu {
     background: url(../src/ATH/DungeonMenu.png);
     top: 200px;
-    margin: auto; 
+    margin: auto;
     position: absolute;
     width: 600px;
     height: 400px;
@@ -33,7 +33,7 @@ body {
 
 #deathMessage {
     top: 200px;
-    margin: auto; 
+    margin: auto;
     position: absolute;
     width: 600px;
     height: 400px;
@@ -44,7 +44,7 @@ body {
     color: #ff6600;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 h1 {
@@ -94,6 +94,7 @@ h1 {
 
 .maybe {
     font-size: 12pt;
+    margin-top: -60px;
 }
 
 #control {
@@ -128,16 +129,21 @@ h1 {
 
 #deathMessage a {
     color: aliceblue;
-    font-size: 16pt;
+    font-size: 20pt;
     text-decoration: none;
     margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#deathMessage p:first-child {
+    margin-top: 100px
 }
 
 #pauseScreen {
     background-color: rgba(105, 105, 105, 0.75);
     display: none;
     top: 200px;
-    margin: auto; 
+    margin: auto;
     position: absolute;
     width: 600px;
     height: 400px;
@@ -252,5 +258,10 @@ h1 {
 
 #formInsert {
     display: flex;
-    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+.scoreLow {
+  color: aliceblue;
+  font-size: 16pt;
 }

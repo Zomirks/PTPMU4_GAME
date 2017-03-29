@@ -79,7 +79,6 @@ function gameStart() {
       invisibleBlocks[5] = new Object("src/terrain/"+invisibleBlockSprite+".png", 1090, 220, 30, 30);
       // liste de tout les blocs solides
       allblocks = blocks.concat(invisibleBlocks);
-      console.log(allblocks);
       // ------- Monstres ---------
       var monsters = new Array();
       monsters[0] = new Object("src/monsters/gr_slime_left.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
@@ -95,8 +94,31 @@ function gameStart() {
 
       //  ------ Pièces ------
       var coins = new Array();
-      coins[0] = new Object("src/terrain/coin.png", 190, 220, 32, 33);
-      coins[1] = new Object("src/terrain/coin.png", 200, 100, 32, 33);
+      coins[0] = new Object("src/terrain/coin.png", 210, 240, 24, 18);
+      coins[1] = new Object("src/terrain/coin.png", 240, 240, 24, 18);
+      coins[2] = new Object("src/terrain/coin.png", 280, 90, 24, 18);
+      coins[3] = new Object("src/terrain/coin.png", 310, 90, 24, 18);
+      coins[4] = new Object("src/terrain/coin.png", 340, 90, 24, 18);
+      coins[5] = new Object("src/terrain/coin.png", 370, 90, 24, 18);
+      coins[6] = new Object("src/terrain/coin.png", 495, 190, 24, 18);
+      coins[7] = new Object("src/terrain/coin.png", 320, 350, 24, 18);
+      coins[8] = new Object("src/terrain/coin.png", 320, 320, 24, 18);
+      coins[9] = new Object("src/terrain/coin.png", 920, 190, 24, 18);
+      coins[10] = new Object("src/terrain/coin.png", 120, 70, 24, 18);
+      coins[11] = new Object("src/terrain/coin.png", 120, 100, 24, 18);
+      coins[12] = new Object("src/terrain/coin.png", 525, 190, 24, 18);
+      coins[13] = new Object("src/terrain/coin.png", 670, 210, 24, 18);
+      coins[14] = new Object("src/terrain/coin.png", 700, 210, 24, 18);
+      coins[15] = new Object("src/terrain/coin.png", 730, 210, 24, 18);
+      coins[16] = new Object("src/terrain/coin.png", 950, 190, 24, 18);
+      coins[17] = new Object("src/terrain/coin.png", 980, 190, 24, 18);
+      coins[18] = new Object("src/terrain/coin.png", 1200, 190, 24, 18);
+      coins[19] = new Object("src/terrain/coin.png", 280, 60, 24, 18);
+      coins[20] = new Object("src/terrain/coin.png", 310, 60, 24, 18);
+      coins[21] = new Object("src/terrain/coin.png", 340, 60, 24, 18);
+      coins[22] = new Object("src/terrain/coin.png", 370, 60, 24, 18);
+      coins[23] = new Object("src/terrain/coin.png", 1230, 190, 24, 18);
+
       // Variables concernant l'initation des attributs des objets
       hero.velocity_x = 0;
       hero.velocity_y = 3;
@@ -206,73 +228,84 @@ function gameStart() {
 
             myBody.appendChild(deathMessage);
 
-            var formulaireInsert = document.createElement("form");
-            formulaireInsert.setAttribute('id', 'formInsert');
-            formulaireInsert.setAttribute('method', 'post');
-            formulaireInsert.setAttribute('enctype', 'multipart/form-data');
-            deathMessage.appendChild(formulaireInsert);
+            if(score>0) {
+              var formulaireInsert = document.createElement("form");
+              formulaireInsert.setAttribute('id', 'formInsert');
+              formulaireInsert.setAttribute('method', 'post');
+              formulaireInsert.setAttribute('enctype', 'multipart/form-data');
+              deathMessage.appendChild(formulaireInsert);
 
-            var inputId = document.createElement("input");
-            inputId.setAttribute('type', 'hidden');
-            inputId.readOnly = true;
-            inputId.setAttribute('name', 'id');
-            formulaireInsert.appendChild(inputId);
+              var inputId = document.createElement("input");
+              inputId.setAttribute('type', 'hidden');
+              inputId.readOnly = true;
+              inputId.setAttribute('name', 'id');
+              formulaireInsert.appendChild(inputId);
 
-            var inputName = document.createElement("input");
-            inputName.setAttribute('type', 'text');
-            inputName.setAttribute('id', 'name');
-            inputName.setAttribute('name', 'name');
-            inputName.setAttribute('placeholder', 'Votre Pseudo');
-            formulaireInsert.appendChild(inputName);
+              var inputName = document.createElement("input");
+              inputName.setAttribute('type', 'text');
+              inputName.setAttribute('id', 'name');
+              inputName.setAttribute('name', 'name');
+              inputName.setAttribute('placeholder', 'Votre Pseudo');
+              formulaireInsert.appendChild(inputName);
 
-            var inputScore = document.createElement("input");
-            inputScore.setAttribute('type', 'hidden');
-            inputScore.readOnly = true;
-            inputScore.setAttribute('id', 'score');
-            inputScore.setAttribute('value', score);
-            inputScore.setAttribute('name', 'score');
-            formulaireInsert.appendChild(inputScore);
+              var inputScore = document.createElement("input");
+              inputScore.setAttribute('type', 'hidden');
+              inputScore.readOnly = true;
+              inputScore.setAttribute('id', 'score');
+              inputScore.setAttribute('value', score);
+              inputScore.setAttribute('name', 'score');
+              formulaireInsert.appendChild(inputScore);
 
-            var submit = document.createElement("input");
-            submit.setAttribute('type', 'submit');
-            submit.setAttribute('id', 'envoyer');
-            submit.setAttribute('value', 'Envoyer');
-            formulaireInsert.appendChild(submit);
+              var submit = document.createElement("input");
+              submit.setAttribute('type', 'submit');
+              submit.setAttribute('id', 'envoyer');
+              submit.setAttribute('value', 'Envoyer');
+              formulaireInsert.appendChild(submit);
 
-            $(document).ready(function () {
-                $("#formInsert").on('submit', function(e) {
-                    e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
+              $(document).ready(function () {
+                  $("#formInsert").on('submit', function(e) {
+                      e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
 
-                    var $this = $(this); // L'objet jQuery du formulaire
+                      var $this = $(this); // L'objet jQuery du formulaire
 
-                    // Je récupère les valeurs
-                    var name = $('#name').val();
-                    var scoreInput = $('#score').val();
+                      // Je récupère les valeurs
+                      var name = $('#name').val();
+                      var scoreInput = $('#score').val();
 
-                    // Je vérifie une première fois pour ne pas lancer la requête HTTP
-                    // si je sais que mon PHP renverra une erreur
-                    if(name === '') {
-                        alert('Les champs doivent êtres remplis');
-                    } else {
-                        // Envoi de la requête HTTP en mode asynchrone
-                        $.ajax({
-                            url:  "./php/insert.php",
-                            type: $this.attr('method'), // La méthode indiquée dans le formulaire (get ou post)
-                            data: $this.serialize(),
-                            success: function(html) { // Je récupère la réponse du fichier PHP
-                                deathMessage.removeChild(formulaireInsert);
-                                var retourMenu = document.createElement("a");
-                                retourMenu.setAttribute("href", "./index.html");
-                                retourMenu.innerHTML += "Menu";
-                                deathMessage.appendChild(retourMenu);
-                                console.log("Nouveau score envoyé dans le classement général (BDD)");
-                            }
-                        });
-                    }
-                });
-            });
+                      // Je vérifie une première fois pour ne pas lancer la requête HTTP
+                      // si je sais que mon PHP renverra une erreur
+                      if(name === '') {
+                          alert('Les champs doivent êtres remplis');
+                      } else {
+                          // Envoi de la requête HTTP en mode asynchrone
+                          $.ajax({
+                              url:  "./php/insert.php",
+                              type: $this.attr('method'), // La méthode indiquée dans le formulaire (get ou post)
+                              data: $this.serialize(),
+                              success: function(html) { // Je récupère la réponse du fichier PHP
+                                  deathMessage.removeChild(formulaireInsert);
+                                  var retourMenu = document.createElement("a");
+                                  retourMenu.setAttribute("href", "./index.html");
+                                  retourMenu.innerHTML += "Menu";
+                                  deathMessage.appendChild(retourMenu);
+                                  console.log("Nouveau score envoyé dans le classement général (BDD)");
+                              }
+                          });
+                      }
+                  });
+              });
+        } else {
+          var scoreLow = document.createElement("p");
+          scoreLow.innerHTML = "S'il te plait fait un effort .. Un Score de 0 quoi ...";
+          scoreLow.setAttribute("class", "scoreLow");
+          deathMessage.appendChild(scoreLow);
+
+          var retourMenu = document.createElement("a");
+          retourMenu.setAttribute("href", "./index.html");
+          retourMenu.innerHTML += "Menu";
+          deathMessage.appendChild(retourMenu);
         }
-
+      }
 
     /* --------------------------------- */
     /* ---------- Main Loop ------------ */
@@ -315,7 +348,6 @@ function gameStart() {
             }
         }
         flyEffect++;
-        console.log(flyEffect);
         // mouvement des rodeurs
 
 
@@ -376,7 +408,7 @@ function gameStart() {
         }
 
         // Défaite
-        if ((hero.pv <= 0) || (hero.y > 450) && (deathScreen == false)){
+        if (((hero.pv <= 0) || (hero.y > 450)) && (deathScreen != true)){
           endGame(score);
             console.log(score);
         }
@@ -387,7 +419,7 @@ function gameStart() {
           blocks[7].x = -30000;
           blocks[7].y = -30000;
         }
-        if (hero.isColliding(chest)){
+        if ((hero.isColliding(chest)) && (deathScreen != true)){
           score = score + (100*hero.pv);
           endGame(score)
         }
@@ -395,7 +427,12 @@ function gameStart() {
         for(i=0; i<coins.length; i++) {
         if(hero.isColliding(coins[i])) {
           IncrementScore(10);
-          console.log(score);
+          coins[i].x = -15000;
+          coins[i].y = -15000;
+          coins[i].velocity_y = 0;
+          coins[i].velocity_x = 0;
+          coins[i].weight = 0;
+          coins[i].gravity = 0;
         }
       }
         // ------------- Traitements des effets et interactions des blocs ----------------
@@ -459,6 +496,10 @@ function gameStart() {
           }
         }
 
+        for (i=0; i<coins.length; i++) {
+          coins[i].renderUpdate(10,7);
+          coins[i].render(ctx);
+        }
         // Placement de l'arme sur le terrain
         weapon.render(ctx);
 
