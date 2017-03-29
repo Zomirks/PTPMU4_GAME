@@ -33,7 +33,7 @@ function gameStart() {
       blocks[4] = new Object("src/terrain/p3.png", 250, 150, 30, 6*28);
       blocks[5] = new Object("src/terrain/p1.png", 350, 250, 30, 10*28);
       blocks[6] = new Object("src/terrain/p3.png", 460, 220, 30, 30);
-      blocks[7] = new Object("src/terrain/door.png", 600-4, 10066, 84, 30);
+      blocks[7] = new Object("src/terrain/door.png", 600-4, 166, 84, 30);
       blocks[8] = new Object("src/terrain/p1.png", 600, 136, 30, 30);
       blocks[9] = new Object("src/terrain/p1.png", 600, 106, 30, 30);
       blocks[10] = new Object("src/terrain/p1.png", 600, 76, 30, 30);
@@ -90,7 +90,7 @@ function gameStart() {
       // ------ Effets ---------
       var killAnimations = new Array(); // animations lorsqu'un monstre est vaincu
 
-      var levitateEffect = 0; // animations des rodeurs
+      var flyEffect = 0; // animations des rodeurs
 
 
       // Variables concernant l'initation des attributs des objets
@@ -304,14 +304,14 @@ function gameStart() {
           monsters[j].CollidingEffects(allblocks);
           monsters[j].iaChangePathOnColliding();
           if (monsters[j].mtype == 'rodeur') {
-            if (levitateEffect >= 50 && levitateEffect < 100)
+            if (flyEffect >= 50 && flyEffect < 100)
               monsters[j].velocity_y = -0.15;
-            else if (levitateEffect >= 100)
-              levitateEffect = 0;
+            else if (flyEffect >= 100)
+              flyEffect = 0;
             }
         }
-        levitateEffect++;
-        console.log(levitateEffect);
+        flyEffect++;
+        console.log(flyEffect);
         // mouvement des rodeurs
 
 
