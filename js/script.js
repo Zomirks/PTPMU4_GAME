@@ -6,7 +6,7 @@ function gameStart() {
     // Activer la visualisation des barrières
     var showInvisibleBlocks = false;
     // Activer la vue des informations par défaut (appuyer sur "i" pour activer/désactiver)
-    var showInformation = true;
+    var showInformation = false;
     var deathScreen = false;
     var AnimationLoop;
     var isPause = false;
@@ -20,6 +20,7 @@ function gameStart() {
       // ------- Héros ---------
       var hero = new Object("src/characters/hero_fix.png", 30, 30, 44, 32);
       var weapon = new Object("src/weapons/weapon_right1.png", -10000, -10000, 10, 26);
+      var chest = new Object("src/terrain/chest.png", 1120+10*28, 220, 30, 38);
       var score = 0;
 
       // ------- Blocs ---------
@@ -32,14 +33,34 @@ function gameStart() {
       blocks[4] = new Object("src/terrain/p3.png", 250, 150, 30, 6*28);
       blocks[5] = new Object("src/terrain/p1.png", 350, 250, 30, 10*28);
       blocks[6] = new Object("src/terrain/p3.png", 460, 220, 30, 30);
+      blocks[7] = new Object("src/terrain/door.png", 600-4, 166, 84, 30);
+      blocks[8] = new Object("src/terrain/p1.png", 600, 136, 30, 30);
+      blocks[9] = new Object("src/terrain/p1.png", 600, 106, 30, 30);
+      blocks[10] = new Object("src/terrain/p1.png", 600, 76, 30, 30);
+      blocks[11] = new Object("src/terrain/p1.png", 600, 46, 30, 32*28);
+      blocks[12] = new Object("src/terrain/p1.png", 600, 250, 30, 7*28);
+      blocks[13] = new Object("src/terrain/p1.png", 900, 250, 30, 5*28);
+      blocks[14] = new Object("src/terrain/p1.png", 1120, 250, 30, 14*28);
+      blocks[15] = new Object("src/terrain/p1.png", 1120+13*28, 220, 30, 30);
+      blocks[16] = new Object("src/terrain/p1.png", 1120+13*28, 190, 30, 30);
+      blocks[17] = new Object("src/terrain/p1.png", 1120+13*28, 160, 30, 30);
+      blocks[18] = new Object("src/terrain/p1.png", 1120+13*28, 130, 30, 30);
+      blocks[19] = new Object("src/terrain/p1.png", 1120+13*28, 100, 30, 30);
+      blocks[20] = new Object("src/terrain/p1.png", 1120+13*28, 70, 30, 30);
+      blocks[21] = new Object("src/terrain/p1.png", 1120+13*28, 46, 30, 30);
       // blocs provoquant des dommages (piques)
       var damageBlocks = new Array();
       damageBlocks[0] = new Object("src/terrain/sp1.png", 490, 221, 30, 2*30);
+      damageBlocks[1] = new Object("src/terrain/sp1.png", 1180, 221, 30, 2*28);
       // blocs unicolores solides
       var fillBlocks = new Array();
       fillBlocks[0] = new Object("src/terrain/p1.png", 250, 180, 300, 6*28+2); fillBlocks[0].color = '#586730';
       fillBlocks[1] = new Object("src/terrain/p1.png", 30, 330, 100, 10*28+2); fillBlocks[1].color = '#55412F';
       fillBlocks[2] = new Object("src/terrain/p1.png", 350, 280, 300, 10*28+2); fillBlocks[2].color = '#55412F';
+      fillBlocks[3] = new Object("src/terrain/p1.png", 600, 76, 400, 32*28+2); fillBlocks[3].color = '#795E42';
+      fillBlocks[4] = new Object("src/terrain/p1.png", 600, 250, 300, 7*28+2); fillBlocks[4].color = '#55412F';
+      fillBlocks[5] = new Object("src/terrain/p1.png", 900, 250, 300, 5*28+2); fillBlocks[5].color = '#55412F';
+      fillBlocks[6] = new Object("src/terrain/p1.png", 1120, 250, 300, 14*28+2); fillBlocks[5].color = '#55412F';
       // blocs mobiles
       var test = blocks.slice() ;
       test.splice(3,1);  // créer un tableau sans le bloc 11
@@ -53,6 +74,9 @@ function gameStart() {
       invisibleBlocks[0] = new Object("src/terrain/"+invisibleBlockSprite+".png", 310, 270, 30, 30);
       invisibleBlocks[1] = new Object("src/terrain/"+invisibleBlockSprite+".png", 220, 120, 30, 30);
       invisibleBlocks[2] = new Object("src/terrain/"+invisibleBlockSprite+".png", 220+7*28, 120, 30, 30);
+      invisibleBlocks[3] = new Object("src/terrain/"+invisibleBlockSprite+".png", 870, 220, 30, 30);
+      invisibleBlocks[4] = new Object("src/terrain/"+invisibleBlockSprite+".png", 900+5*28+2, 220, 30, 30);
+      invisibleBlocks[5] = new Object("src/terrain/"+invisibleBlockSprite+".png", 1090, 220, 30, 30);
       // liste de tout les blocs solides
       allblocks = blocks.concat(invisibleBlocks);
       console.log(allblocks);
@@ -60,7 +84,9 @@ function gameStart() {
       var monsters = new Array();
       monsters[0] = new Object("src/monsters/gr_slime_left.png", 190, 220, 28, 30); monsters[0].mtype = 'gr_slime';
       monsters[1] = new Object("src/monsters/gr_slime_right.png", 160, 270, 28, 30); monsters[1].mtype = 'gr_slime';
-      monsters[2] = new Object("src/monsters/rodeur_left.png", 274, 106, 42, 34); monsters[2].mtype = 'rodeur';
+      monsters[2] = new Object("src/monsters/gr_slime_right.png", 274, 106, 28, 30); monsters[2].mtype = 'gr_slime';
+      monsters[3] = new Object("src/monsters/rodeur_left.png", 930, 220-42, 42, 34); monsters[3].mtype = 'rodeur';
+      monsters[4] = new Object("src/monsters/rodeur_left.png", 1300, 250-42, 42, 34); monsters[4].mtype = 'rodeur';
       // ------ Effets ---------
       var killAnimations = new Array();
 
@@ -338,6 +364,17 @@ function gameStart() {
             console.log(score);
         }
 
+        // Evènements
+        // Porte qui s'ouvre
+        if (monsters[0].pv == 0 && monsters[1].pv == 0 && monsters[2].pv == 0){
+          blocks[7].x = -30000;
+          blocks[7].y = -30000;
+        }
+        if (hero.isColliding(chest)){
+          score = score + 100;
+          endGame(score)
+        }
+
         // ------------- Traitements des effets et interactions des blocs ----------------
         blocks[3].CollidingEffects(test);
 
@@ -397,6 +434,9 @@ function gameStart() {
 
         // Placement de l'arme sur le terrain
         weapon.render(ctx);
+
+        // Placement du coffre sur le terrain
+        chest.render(ctx);
 
         // Placement du héros sur le terrain
         if (isRight && (hero.velocity_y == 0)){
@@ -486,7 +526,6 @@ function gameStart() {
           ctx.fillText('vel_x: '+Math.round(hero.velocity_x*100)/100,520,90);
           ctx.fillText('vel_y: '+Math.round(hero.velocity_y*100)/100,520,105);
         }
-
 
         // Défintion des frames de la boucle MainLoop
 
@@ -770,7 +809,7 @@ function gameStart() {
       // Positionnement de la caméra (selon la taille de l'écran, ici 600x400)
       var camera = new Camera(600,400);
       var screenBorderLeft = 200; // à partir de quelle position la caméra ne défile plus vers la gauche (limite de la map)
-      var screenBorderRight = 700; // Idem pour la droite
+      var screenBorderRight = 2000; // Idem pour la droite
       var renderOffsetX = 0; // position courante de la caméra
 
       // Update de l'offset de la "caméra" (défillement horizontal)
