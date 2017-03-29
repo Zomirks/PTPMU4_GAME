@@ -384,7 +384,7 @@ function gameStart() {
           blocks[7].y = -30000;
         }
         if (hero.isColliding(chest)){
-          score = score + 100;
+          score = score + (100*hero.pv);
           endGame(score)
         }
 
