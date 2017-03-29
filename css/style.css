@@ -6,6 +6,10 @@ body {
     font-family: 'Oswald', sans-serif;
 }
 
+#logo {
+    margin-top: 20px;
+}
+
 #graphics {
     background-color: #B17C68;
     position: absolute;
@@ -14,12 +18,13 @@ body {
 }
 
 #menu {
+    background: url(../src/ATH/DungeonMenu.png);
     top: 200px;
     margin: auto; 
     position: absolute;
     width: 600px;
     height: 400px;
-    background-color: dimgrey;
+    background-color: #55412F;
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -32,7 +37,7 @@ body {
     position: absolute;
     width: 600px;
     height: 400px;
-    background-color: dimgrey;
+    background-color: #55412F;
     z-index: 1;
     display: flex;
     font-size: 55pt;
@@ -48,6 +53,7 @@ h1 {
     font-size: 30pt;
     margin-top: 30px;
     font-weight: bold;
+    color: #ff6600;
 }
 
 #ulMenu {
@@ -55,29 +61,35 @@ h1 {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    height: 80%;
+    height: 100%;
     align-items: center;
+    color: aliceblue;
 }
 
 #ulMenu li {
     cursor: pointer;
-    margin-bottom: 20px;
-    font-size: 18pt;
+    margin-bottom: 40px;
+    font-size: 30pt;
 }
 
 #ulMenu li:hover {
-    transform: scale(1.5);
-    color: crimson;
+    color: #ff6600;
 }
 
 #ulMenu li:hover:before {
-    content: "* ";
-    color: #B17C68;
+    background: url('../src/weapons/weapon_left1.png') CENTER CENTER NO-REPEAT;
+    content: url('../src/weapons/weapon_empty.png');
+    height: 10px;
+    width: 26px;
+    margin-right: 10px;
 }
 
 #ulMenu li:hover:after {
-    content: " *";
-    color: #B17C68;
+    background: url('../src/weapons/weapon_right1.png') CENTER CENTER NO-REPEAT;
+    content: url('../src/weapons/weapon_empty.png');
+    height: 10px;
+    width: 26px;
+    margin-left: 10px;
 }
 
 .maybe {
@@ -97,7 +109,7 @@ h1 {
 }
 
 #Arrow {
-    border: 1px solid blue;
+    border: 1px solid #ff6600;
 }
 
 .flex {
@@ -110,7 +122,7 @@ h1 {
 }
 
 #control img:hover {
-    border: 1px solid blue;
+    border: 1px solid #ff6600;
     border-radius: 5px;
 }
 
@@ -210,7 +222,7 @@ h1 {
 }
 
 #retourMenu:hover {
-    transform: scale(1.5);
+    color: scale(1.5);
 }
 
 #envoyer {
