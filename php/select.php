@@ -1,5 +1,5 @@
 <?php
-
+//  On sélectionne le nom et le score dans la table tableauScore dans la base de donnée et on le retourne en json pour le réutiliser dans ajax.js
 try {
     $pdo = new PDO('mysql:host=base.iha.unistra.fr;dbname=jscrew;charset=utf8', 'jscrew', 'fgnUsUt9toikTIls');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
