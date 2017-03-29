@@ -1,4 +1,5 @@
 <?php
+//      Class Player avec un id, un nom et un score
 class Player {
     private $id;
 	private $name;
@@ -10,6 +11,7 @@ class Player {
 		$this->score = 0;
 	}
     
+    //      On charge les données envoyées par formulaire avec la méthode POST
     function chargePOST() {
 		$ok = true;
 		$message = '';
@@ -32,6 +34,7 @@ class Player {
 		return $result;
 	}
     
+    //      Permet après avoir utilisé la fonction chargePost() d'insérer dans la base de donnée le nom et score de l'utilisateur (l'id se fait automatiquement)
     function insertIntoDB() {
         try {
             $pdo = new PDO('mysql:host=base.iha.unistra.fr;dbname=jscrew;charset=utf8', 'jscrew', 'fgnUsUt9toikTIls');
@@ -62,15 +65,12 @@ class Player {
     }
 }
 
-
+//      On crée un nouvel objet player, on charge les données envoyées par la méthode POST dans des variables et ensuite on les insert dans la base de donnée
  
 $player = new Player();
 $result = $player->chargePOST();
 if ($result['ok']) {
     $player->insertIntoDB();
-    $html = $player->affiche();
-    $result['message'] = 'insertion réussie';
-    $result['html'] = $html;
 }
 $json = json_encode($result);
 echo $json;

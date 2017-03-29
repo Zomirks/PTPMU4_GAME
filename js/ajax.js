@@ -1,3 +1,4 @@
+//      Définition des variables
 var menu = document.getElementById("menu");
 var controler = document.getElementById("control");
 var newGame = document.getElementById("newGame");
@@ -5,7 +6,7 @@ var scriptJeu = document.createElement("script");
 var myBody = document.getElementById("body");
 scriptJeu.src = "./js/script.js";
 
-//		Lance une nouvelle partie
+//		Lance une nouvelle partie lorsque la page est chargée
 document.addEventListener("DOMContentLoaded", function(event) {
     newGame.addEventListener("click", function() {
         menu.style.display = "none";
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 });
 
-//		Affiche le classement des joueurs
+//		Affiche le classement des joueurs lors du click sur "classement" dans le menu
 document.getElementById('ajax_button').addEventListener('click', function() {
     $.ajax({
         // URL du script coté serveur
@@ -25,6 +26,7 @@ document.getElementById('ajax_button').addEventListener('click', function() {
 
         // La fonction a exécuter en cas de réussite
         success: function(retour) {
+            //  Pour chaque éléments dans la base de donnée on crée un li contenu dans un ul avec classe "ulClassement"
             $('#title').text("Classement");
             $('ul').remove();
             var ulClassement = document.createElement("ul");
@@ -54,13 +56,14 @@ document.getElementById('ajax_button').addEventListener('click', function() {
                 ulClassement.appendChild(elt);
                 i += 1;
             });
-
+            
+            //      Création d'un bouton retour pour retourner au menu principal
             var retourMenu = document.createElement("div");
             retourMenu.id = "retourMenu";
             retourMenu.innerHTML = "Retour";
             $('#menu').append(retourMenu);
 
-			//			Permet de retourner au menu 
+			//		Au clic sur le bouton retour lorsqu'on est dans classement on regénère le menu avec du js
             document.getElementById('retourMenu').addEventListener('click', function() {
                 $('#title').text("Game");
                 $('ul').remove();
@@ -84,6 +87,7 @@ document.getElementById('ajax_button').addEventListener('click', function() {
                 credit.innerHTML = "Crédits";
                 ulMenu.append(credit);
 
+                //      Permet de relancer une nouvelle partie après avoir regarder le classement, être retourné dans le menu et avoir click sur "Nouvelle partie"
                 newGame.addEventListener("click", function() {
                     menu.style.display = "none";
                     controler.style.display = "flex";
