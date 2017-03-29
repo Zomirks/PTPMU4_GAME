@@ -202,7 +202,7 @@ function gameStart() {
             submit.setAttribute('id', 'envoyer');
             submit.setAttribute('value', 'Envoyer');
             formulaireInsert.appendChild(submit);
-
+            
             $(document).ready(function () {
                 $("#formInsert").on('submit', function(e) {
                     e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
@@ -225,8 +225,11 @@ function gameStart() {
                             data: $this.serialize(),
                             success: function(html) { // Je récupère la réponse du fichier PHP
                                 deathMessage.removeChild(formulaireInsert);
-                                deathMessage.innerHTML += '<a href="./index.html">Menu</div>';
-                                console.log("Nouveau score entré dans le classement général");
+                                var retourMenu = document.createElement("a");
+                                retourMenu.setAttribute("href", "./index.html");
+                                retourMenu.innerHTML += "Menu";
+                                deathMessage.appendChild(retourMenu);
+                                console.log("Nouveau score envoyé dans le classement général (BDD)");
                             }
                         });
                     }

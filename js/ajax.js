@@ -82,11 +82,6 @@ document.getElementById('ajax_button').addEventListener('click', function() {
                 classement.innerHTML = "Classement";
                 ulMenu.append(classement);
 
-                var credit = document.createElement("li");
-                credit.id = "credit";
-                credit.innerHTML = "Crédits";
-                ulMenu.append(credit);
-
                 //      Permet de relancer une nouvelle partie après avoir regarder le classement, être retourné dans le menu et avoir click sur "Nouvelle partie"
                 newGame.addEventListener("click", function() {
                     menu.style.display = "none";

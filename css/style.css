@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald:400,600');
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Oswald', sans-serif;
 }
 
 #graphics {
@@ -34,7 +36,7 @@ body {
     z-index: 1;
     display: flex;
     font-size: 55pt;
-    color: crimson;
+    color: #ff6600;
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -209,4 +211,34 @@ h1 {
 
 #retourMenu:hover {
     transform: scale(1.5);
+}
+
+#envoyer {
+    cursor: pointer;
+    font-size: 16pt;
+    width: 100px;
+    height: 50px;
+    border: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #ff6600;
+    color: aliceblue;
+    padding: 0 10px;
+    font-family: 'Oswald', sans-serif;
+    outline: 0;
+}
+
+#name {
+    border: none;
+    font-size: 16pt;
+    padding: 0 10px;
+    height: 50px;
+    outline: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#formInsert {
+    display: flex;
+    margin-top: 80px;
 }
